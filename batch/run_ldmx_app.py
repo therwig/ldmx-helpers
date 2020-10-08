@@ -8,6 +8,7 @@ import platform
 import random
 import subprocess
 import time
+import shutil
 
 from string import Template
 
@@ -35,26 +36,35 @@ def cantor_pair(a, b):
 #   inputEventFile, outputEventFile, histogramFile
 # To have a key substituted with its value, you should insert it in the python config like:
 #   $key_name
-def write_config( template_config, outPrefix, job_id, inputFile ):
+def write_config( template_config, outPrefix, job_id, inputFile, newSeed=False ):
     
     job = int(job_id)
 
     totalPrefix = outPrefix + '_'
     if ( inputFile == "" ) :
-        #no input file or input file is lhe file ==> production/simulation run
-        random.seed(time.time())
-        seed1 = int(random.random()*100000000)
-        seed2 = int(random.random()*100000000)
-        
-        seed1 = int(str(cantor_pair(seed1, job))[:6])
-        seed2 = int(str(cantor_pair(seed2, job))[:6])
-        
-        logging.info('Using seeds %s %s' % (seed1, seed2))
-    
-        run = '%s%s' % (seed1, seed2)
-        logging.info('Setting run number to %s' % run)
-        
-        totalPrefix += run
+        if newSeed:
+            #no input file or input file is lhe file ==> production/simulation run
+            random.seed(time.time())
+            seed1 = int(random.random()*100000000)
+            seed2 = int(random.random()*100000000)
+            
+            seed1 = int(str(cantor_pair(seed1, job))[:6])
+            seed2 = int(str(cantor_pair(seed2, job))[:6])
+            
+            logging.info('Using seeds %s %s' % (seed1, seed2))
+            
+            run = '%s%s' % (seed1, seed2)
+            logging.info('Setting run number to %s' % run)
+            
+            totalPrefix += run
+        else:
+            run = str(job)
+            seed1=2*job
+            seed2=2*job+1
+            logging.info('Setting run number to %s' % run)
+            logging.info('Using seeds %s %s' % (seed1, seed2))
+            totalPrefix += run    
+            #note, we can simple set the seeds later in the ldmx-sw cfg itself from the run
     elif inputFile.endswith('.lhe') :
         # input lhe file ==> lhe sim run
         totalPrefix += str(job_id) + '_' + inputFile[:-4] #remove .lhe
@@ -126,6 +136,9 @@ def main():
     parser.add_argument('--histOut', 
             default='',
             help='Path to save histogram output to.')
+    parser.add_argument('--logOut', 
+            default='',
+            help='Path to save log outputs to.')
     parser.add_argument('config', 
             type=str,
             help='Config template to use.')
@@ -180,7 +193,8 @@ def main():
         files = glob.glob('%s/*' % tmp_dir)
         for f in files: 
             logging.info('Removing %s' % f)
-            os.remove(f)
+            if os.path.isdir(f): shutil.rmtree(f)
+            else: os.remove(f)
 
     # Create a link to the config template
     os.symlink(args.config.strip(), 'config_template.py')
@@ -198,21 +212,46 @@ def main():
         #end loop over detector files
     #end if detector directory provided
 
-    if 'LSB_JOBID' in os.environ: 
+    if 'LSB_JOBINDEX' in os.environ: 
+        jobid = os.environ['LSB_JOBINDEX']
+    elif 'LSB_JOBID' in os.environ: 
         jobid = os.environ['LSB_JOBID']
     else: jobid = 100
 
     #write config steering file
     config_path, eventsf, histsf = write_config('config_template.py', args.prefix, jobid, args.inputFile)
-    #run ldmx-app and wait for it to finish
-    #command = "ldmx-app %s" % config_path
+    stem = eventsf.replace('_events.root','')
+    logout = stem+".out"
+    logerr = stem+".err"
+    logoutf = open(logout,'w')
+    logerrf = open(logerr,'w')
+    #run 'ldmx fire' and wait for it to finish
     command = "fire %s" % config_path
-    if args.test :
+    if args.test:
         logging.info( command )
-    else :
-        subprocess.Popen(command, shell=True).wait()
+    else:
+        subprocess.Popen(command, shell=True, stdout=logoutf, stderr=logerrf).wait()
+
+    logoutf.close()
+    logerrf.close()
+
+    # Debugging the random seed
+    # os.system( "echo random seed is {} >> {}".format(jobid,logout) )
 
     #copy outputs to output directory after ldmx-app is done
+    if not args.test :
+        logOutputDir = args.logOut.strip()
+        if not logOutputDir: logOutputDir = args.eventOut.strip() + "/log"
+        if not os.path.isdir(logOutputDir): os.makedirs(logOutputDir, exist_ok=True)
+        if os.path.isfile( logout ) :
+            logging.info('cp %s %s' % ( logout , os.path.join( logOutputDir , logout ) ) )
+            os.system('cp %s %s' % ( logout , os.path.join( logOutputDir , logout ) ) )
+        else: logging.info('%s does not exist' % ( logout ) )
+        if os.path.isfile( logerr ) :
+            logging.info('cp %s %s' % ( logerr , os.path.join( logOutputDir , logerr ) ) )
+            os.system('cp %s %s' % ( logerr , os.path.join( logOutputDir , logerr ) ) )
+        else: logging.info('%s does not exist' % ( logerr ) )
+
     if args.eventOut :
         if os.path.isfile( eventsf ) :
             eventOutputDir = args.eventOut.strip()

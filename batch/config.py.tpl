@@ -1,52 +1,82 @@
-#!/usr/bin/python
+#!/bin/python3
+
+import os
+import sys
+import json
 
 from LDMX.Framework import ldmxcfg
-from LDMX.Biasing import target
-from LDMX.SimCore import generators
+
+p=ldmxcfg.Process("v12")
+p.run = 1
+
+import LDMX.Ecal.EcalGeometry
+import LDMX.Ecal.ecal_hardcoded_conditions
+
 from LDMX.SimCore import simulator
+from LDMX.SimCore import generators
+# sim = simulator.simulator("mySim")
+# sim.setDetector( 'ldmx-det-v12', True  )
+# sim.description = "ECal photo-nuclear, xsec bias 450"
+# sim.randomSeeds = [ 2*p.run , 2*p.run+1 ]
+# sim.beamSpotSmear = [20., 80., 0]
+# from LDMX.SimCore import generators
+# sim.generators = [ generators.single_4gev_e_upstream_tagger() ]
+# sim.biasingOn(True)
+# sim.biasingConfigure('photonNuclear', 'ecal', 2500., 450)
+# from LDMX.Biasing import filters
+# sim.actions = [ filters.TaggerVetoFilter(),
+#                 filters.TargetBremFilter(),
+#                 filters.EcalProcessFilter(), 
+#                 filters.TrackProcessFilter.photo_nuclear() ]
 
-# We need to create a process
-#   this is the object that keeps track of all the files/processors/histograms/etc
-#   the input name is a shortcode to distinguish this run
-p=ldmxcfg.Process("SingleE")
-
-# We need to tell the process what libraries are required
-#   Here we are using a biased simulation, so we need both of those libraries
-p.libraries.append("libSimCore.so")
-
-# Single particle gun
 myGun = generators.gun('myGun')
 myGun.particle = 'e-' 
 myGun.position = [ 0., 0., -1.2 ]  # mm
 myGun.direction = [ 0., 0., 1] 
 myGun.energy = 4.0 # GeV
-
 myGen = myGun
-
-# Instantiate the sim.
 sim = simulator.simulator("SingleE")
-
-# Set the path to the detector to use.
-#   Also tell the simulator to include scoring planes
 sim.setDetector( 'ldmx-det-v12' , True )
-
-# Set run parameters
 sim.runNumber = $run
 sim.description = "Single electron gun"
-sim.randomSeeds = [ $seed1, $seed2 ]
+sim.randomSeeds = [ 2*p.run , 2*p.run+1 ]
 sim.beamSpotSmear = [20., 80., 0.] #mm
-
 sim.generators.append(myGen)
 
-# Put the simulation into the process sequence
-p.sequence=[sim]
 
-# Give a name for the output file
-#p.outputFiles=['single_e.root']
+from LDMX.EventProc.trigScintDigis import TrigScintDigiProducer
+tsDigisUp   = TrigScintDigiProducer.up()
+tsDigisTag  = TrigScintDigiProducer.tagger()
+tsDigisDown = TrigScintDigiProducer.down()
+
+#set the PE response to 100 (default is 10, too low)
+tsDigisUp.pe_per_mip   = 100.
+tsDigisTag.pe_per_mip  = tsDigisUp.pe_per_mip
+tsDigisDown.pe_per_mip = tsDigisUp.pe_per_mip
+
+from LDMX.Ecal import digi
+from LDMX.Ecal import ecal_trig_digi
+#from LDMX.Ecal import vetos
+from LDMX.EventProc import hcal
+from LDMX.EventProc.simpleTrigger import simpleTrigger 
+from LDMX.EventProc.trackerHitKiller import trackerHitKiller
+p.sequence=[ sim, 
+             digi.EcalDigiProducer(),
+             ecal_trig_digi.EcalTrigPrimDigiProducer(),
+             digi.EcalRecProducer(), 
+             #        vetos.EcalVetoProcessor(),
+             hcal.HcalDigiProducer(),
+             hcal.HcalVetoProcessor(), 
+             tsDigisUp, tsDigisTag, tsDigisDown, 
+             trackerHitKiller, 
+             simpleTrigger, 
+             ldmxcfg.Producer('finableTrack','ldmx::FindableTrackProcessor','EventProc'),
+             ldmxcfg.Producer('trackerVeto' ,'ldmx::TrackerVetoProcessor'  ,'EventProc')
+]
+
+#p.outputFiles=["simoutput.root"]
 p.outputFiles=[ "$outputEventFile" ]
-
-# How many events should the process simulation?
 p.maxEvents = 40*1000
+with open('parameterDump.json', 'w') as outfile:
+     json.dump(p.parameterDump(),  outfile, indent=4)
 
-# How frequently should the process print an update?
-p.logFrequency = 10

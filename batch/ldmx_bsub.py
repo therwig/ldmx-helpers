@@ -142,36 +142,51 @@ def main():
     # could rewrite with job arrays for more efficient submission
     # https://www.ibm.com/support/knowledgecenter/SSWRJV_10.1.0/lsf_admin/job_array_cl_args.html
 
-    for job in range(0, jobs):
+    doJobArray=True
 
-        # wait until the number of jobs pending is <= 5
-        if not args.test:
-            pendingCount = int(subprocess.check_output('bjobs -p 2> /dev/null | wc -l', shell=True))
-            while pendingCount > 5 : 
-                sys.stdout.write( 'Total jobs pending: %s\r' % pendingCount )
-                sys.stdout.flush()
-                time.sleep(1)
-                pendingCount = int(subprocess.check_output('bjobs -p 2> /dev/null | wc -l',shell=True))
-    
-            if pendingCount > 0 :
-                time.sleep(10)
-        #end if not test
+    # bsub -J "myArray[1-1000]" myJob -f input.\$LSB_JOBINDEX
 
+    if doJobArray and len(inputFileList)==0:
         ofile = "%s_%s" % (oprefix, str(uuid.uuid4())[:8])
         specific_command = command + '--prefix %s ' % ( ofile )
+        array_command = "-J jobArray[1-{}] ".format(jobs)
+        full_command = batch_command+array_command+specific_command
+        # print("command:")
+        # print(full_command)
+        subprocess.Popen(full_command, shell=True).wait()
+        # must catch the LSB_JOBINDEX env variable
         
-        if 'InputFileList' in parameters:
-            specific_command += '--inputFile %s ' % ( inputFileList[job] )
-        #end attachment of input file
-
-        if args.test: 
-            logging.info( batch_command+specific_command )
-            subprocess.Popen(specific_command + ' --test', shell=True).wait()
-        else:
-            subprocess.Popen(batch_command+specific_command, shell=True).wait()
-            time.sleep(1)
-        #end whether or not is a test
-    #end loop through jobs
+    else:
+        for job in range(0, jobs):
+        
+            # wait until the number of jobs pending is <= 5
+            if not args.test:
+                pendingCount = int(subprocess.check_output('bjobs -p 2> /dev/null | wc -l', shell=True))
+                while pendingCount > 5 : 
+                    sys.stdout.write( 'Total jobs pending: %s\r' % pendingCount )
+                    sys.stdout.flush()
+                    time.sleep(1)
+                    pendingCount = int(subprocess.check_output('bjobs -p 2> /dev/null | wc -l',shell=True))
+        
+                if pendingCount > 0 :
+                    time.sleep(10)
+            #end if not test
+        
+            ofile = "%s_%s" % (oprefix, str(uuid.uuid4())[:8])
+            specific_command = command + '--prefix %s ' % ( ofile )
+            
+            if 'InputFileList' in parameters:
+                specific_command += '--inputFile %s ' % ( inputFileList[job] )
+            #end attachment of input file
+        
+            if args.test: 
+                logging.info( batch_command+specific_command )
+                subprocess.Popen(specific_command + ' --test', shell=True).wait()
+            else:
+                subprocess.Popen(batch_command+specific_command, shell=True).wait()
+                time.sleep(1)
+            #end whether or not is a test
+        #end loop through jobs
 
 if __name__ == "__main__" : 
     main()
