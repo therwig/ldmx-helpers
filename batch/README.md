@@ -1,4 +1,4 @@
-
+```
 scl enable devtoolset-8 bash
 source ~/.bash_profile
 source ~/ldmx/local_setup.sh
@@ -8,5 +8,6 @@ python run_ldmx_app.py /nfs/slac/g/ldmx/users/therwig/sandbox/ldmx-sw/run/batcht
 python ldmx_bsub.py sample.yml -t
 
 python ldmx_bsub.py sample.yml
+```
 
-1k * 10k evts
+Something like 1k * 10k events.
