@@ -1,0 +1,1592 @@
+
+QUEUE: admin
+  -- Jobs run by LSF systems administrators needing Exclusive
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+255    0  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE  RESOURCE_RESERVE
+
+USERS: renata scs yangw yemi lsf platform neal abh bartelt jonl   
+HOSTS:  all 
+Maximum resource reservation time: 30000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: systems
+  -- For jobs run by systems people
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+245    2  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched  3.0   3.0    -     -       -     -    -     -     -      -      -  
+ loadStop   8.0   8.0    -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: wilko lsf platform sysgrp/   
+HOSTS:  all 
+
+-------------------------------------------------------------------------------
+
+QUEUE: express
+  -- For very short jobs -- preemptive
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+200    3  Open:Active       -   50    -    -     0     0     0     0     0    0     0
+ RUNLIMIT                
+ 4.0 min
+
+ MEMLIMIT SWAPLIMIT
+      4 G      10 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched  2.5   2.0    -     -       -     -    -     -     -      -      -  
+ loadStop   8.0   8.0    -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  BACKFILL
+
+USERS: all  
+HOSTS:  genfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+CHUNK_JOB_SIZE: 5
+
+-------------------------------------------------------------------------------
+
+QUEUE: glastdataq
+  -- GLAST Data queue.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+198    0  Open:Active    1200    -    -    -   130     0   130     0     0    0     0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+USERS: glastdata/   
+HOSTS:  hequfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: simesdmrg
+  -- SIMES dmrg queue.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+192    0  Open:Active       -    -    -    -   432    48   384     0     0    0     2
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: renata jdodaro yemi tpd shenxiu hcjiang ewh yifan2 kilianc kivelson   
+HOSTS:  simesdmrgfarm/ 
+ADMINISTRATORS:  hcjiang 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: simesdmrgmem
+  -- SIMES dmrg large memory queue.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+192    0  Open:Active       -    -    -    -   144     0   144     0     0    0     0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: renata jdodaro yemi tpd shenxiu hcjiang ewh yifan2 kilianc kivelson   
+HOSTS:  simesgoldfarm/ 
+ADMINISTRATORS:  hcjiang 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: beamphysics-mpi
+  -- Beamphysics mpi queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+189    0  Open:Active       -    -  1.0    -   160     0   160     0     0    0     0
+ RUNLIMIT                
+ 10080.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+
+USERS: renata beamphysgrp/   
+HOSTS:  bmbulletfarm+1 bulletfarm/ 
+RES_REQ:  select[type==LINUX] span[ptile=16] order[slots]
+Maximum resource reservation time: 216000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: beamphys-centos7
+  -- Beamphysics centos7 queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+189    0  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE  RESOURCE_RESERVE
+
+USERS: renata beamphysgrp/   
+HOSTS:  bmbubblefarm+1 bubblefarm/ 
+RES_REQ:  select[type==LINUX] span[ptile=36] order[slots]
+Maximum resource reservation time: 216000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: bulletmpi
+  -- Bullet mpi queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+187    0  Open:Active       - 1024  1.0    -    64     0    64     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 15.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 10080.0 min
+ TASKLIMIT               
+ 8 8 512
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+
+USERS: bulletmpigrp/ beamphysgrp/   
+HOSTS:  bulletfarm/ 
+ADMINISTRATORS:  marshall 
+RES_REQ:  select[type==LINUX] span[ptile=16] order[slots]
+Maximum resource reservation time: 216000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: bulletmpi-large
+  -- Bullet mpi queue for larger mpi jobs...see lsb.resources
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+187    0  Open:Active       - 2048  1.0    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 15.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 1440.0 min
+ TASKLIMIT               
+ 513 513 2048
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+
+USERS: bulletmpigrp/   
+HOSTS:  bulletfarm/ 
+ADMINISTRATORS:  marshall 
+RES_REQ:  select[type==LINUX] span[ptile=16] order[slots]
+Maximum resource reservation time: 216000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: short
+  -- No description provided.  This is one of the default queues.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+185    5  Open:Active       -    -  1.0    -     7     7     0     0     0    0     7
+
+DEFAULT LIMITS: RUNLIMIT                
+ 20.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 60.0 min
+
+ MEMLIMIT SWAPLIMIT
+      4 G      10 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.2    -     -       -     -    -     -     -     64M     -  
+ loadStop    -     -     -     -       -     -    -     -     -     16M     -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL
+FAIRSHARE_QUEUES:  short medium simuq long atlasq atl-analq
+USER_SHARES:  [atlasgrp, 37875] [babarAll, 7859] [cdmsALL, 2000] [exoprodgrp, 1500] [exousergrp, 550] [geantgrp, 3874] [glastdata, 854] [glastgrp, 366] [glastusers, 25320] [hpsprodgrp, 1000] [lcd, 600] [lcdprodgrp, 1100] [luxlz, 3500] [rpgrp, 500] [theorygrp, 4257] [AllUsers, 16086] 
+
+SHARE_INFO_FOR: short/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+babarAll     7859    2619.667      0        0         0.0        0       0.000             0
+geantgrp     3874    1291.333      0        0         0.0        0       0.000             0
+luxlz        3500    1166.667      0        0         0.0        0       0.000             0
+theorygrp    4257     798.824      0        0     11978.2        0       0.000             0
+cdmsALL      2000     666.667      0        0         0.0        0       0.000             0
+lcdprodgrp   1100     366.667      0        0         0.0        0       0.000             0
+hpsprodgrp   1000     333.333      0        0         0.0        0       0.000             0
+glastdata     854     265.702      0        0      1101.2        0       0.000             0
+exoprodgrp   1500     259.831      0        0     14261.1        0       0.000             0
+lcd           600     200.000      0        0         0.0        0       0.000             0
+exousergrp    550     183.333      0        0         0.0        0       0.000             0
+rpgrp         500     166.667      0        0         0.0        0       0.000             0
+glastgrp      366     121.945      0        0         7.0        0       0.000             0
+glastusers  25320       5.525    551        0   8385345.5  6665185       0.000             0
+atlasgrp    37875       2.734    512        0  37148052.0 26195777       0.000             0
+AllUsers    16086       0.239   1861        0  98764064.0 218012491       0.000             0
+
+USERS: all  
+HOSTS:  hequfarm+1 dolefarm+1 kisofarm+1 deftcentosfarm+1 bubblefarm+1 bulletfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: medium
+  -- No description provided.  This is one of the default queues.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+180   10  Open:Active       -    -  1.0    -   148     1   147     0     0    0     1
+
+DEFAULT LIMITS: RUNLIMIT                
+ 30.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 2880.0 min
+
+ MEMLIMIT SWAPLIMIT
+      4 G      10 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.1    -     -       -     -    -     -     -     64M     -  
+ loadStop    -     -     -     -       -     -    -     -     -     16M     -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL
+FAIRSHARE_QUEUES:  short medium simuq long atlasq atl-analq
+USER_SHARES:  [atlasgrp, 37875] [babarAll, 7859] [cdmsALL, 2000] [exoprodgrp, 1500] [exousergrp, 550] [geantgrp, 3874] [glastdata, 854] [glastgrp, 366] [glastusers, 25320] [hpsprodgrp, 1000] [lcd, 600] [lcdprodgrp, 1100] [luxlz, 3500] [rpgrp, 500] [theorygrp, 4257] [AllUsers, 16086] 
+
+SHARE_INFO_FOR: medium/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+babarAll     7859    2619.667      0        0         0.0        0       0.000             0
+geantgrp     3874    1291.333      0        0         0.0        0       0.000             0
+luxlz        3500    1166.667      0        0         0.0        0       0.000             0
+theorygrp    4257     798.824      0        0     11978.2        0       0.000             0
+cdmsALL      2000     666.667      0        0         0.0        0       0.000             0
+lcdprodgrp   1100     366.667      0        0         0.0        0       0.000             0
+hpsprodgrp   1000     333.333      0        0         0.0        0       0.000             0
+glastdata     854     265.702      0        0      1101.2        0       0.000             0
+exoprodgrp   1500     259.831      0        0     14261.1        0       0.000             0
+lcd           600     200.000      0        0         0.0        0       0.000             0
+exousergrp    550     183.333      0        0         0.0        0       0.000             0
+rpgrp         500     166.667      0        0         0.0        0       0.000             0
+glastgrp      366     121.945      0        0         7.0        0       0.000             0
+glastusers  25320       5.525    551        0   8385345.5  6665185       0.000             0
+atlasgrp    37875       2.734    512        0  37148052.0 26195777       0.000             0
+AllUsers    16086       0.239   1861        0  98764064.0 218012491       0.000             0
+
+USERS: all  
+HOSTS:  hequfarm+1 dolefarm+1 kisofarm+1 deftcentosfarm+1 bubblefarm+1 bulletfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: simuq
+  -- Queue for BaBar simulation production
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+176   15  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+ RUNLIMIT                
+ 1440.0 min
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.3    -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE
+FAIRSHARE_QUEUES:  short medium simuq long atlasq atl-analq
+USER_SHARES:  [atlasgrp, 37875] [babarAll, 7859] [cdmsALL, 2000] [exoprodgrp, 1500] [exousergrp, 550] [geantgrp, 3874] [glastdata, 854] [glastgrp, 366] [glastusers, 25320] [hpsprodgrp, 1000] [lcd, 600] [lcdprodgrp, 1100] [luxlz, 3500] [rpgrp, 500] [theorygrp, 4257] [AllUsers, 16086] 
+
+SHARE_INFO_FOR: simuq/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+babarAll     7859    2619.667      0        0         0.0        0       0.000             0
+geantgrp     3874    1291.333      0        0         0.0        0       0.000             0
+luxlz        3500    1166.667      0        0         0.0        0       0.000             0
+theorygrp    4257     798.824      0        0     11978.2        0       0.000             0
+cdmsALL      2000     666.667      0        0         0.0        0       0.000             0
+lcdprodgrp   1100     366.667      0        0         0.0        0       0.000             0
+hpsprodgrp   1000     333.333      0        0         0.0        0       0.000             0
+glastdata     854     265.702      0        0      1101.2        0       0.000             0
+exoprodgrp   1500     259.831      0        0     14261.1        0       0.000             0
+lcd           600     200.000      0        0         0.0        0       0.000             0
+exousergrp    550     183.333      0        0         0.0        0       0.000             0
+rpgrp         500     166.667      0        0         0.0        0       0.000             0
+glastgrp      366     121.945      0        0         7.0        0       0.000             0
+glastusers  25320       5.525    551        0   8385345.5  6665185       0.000             0
+atlasgrp    37875       2.734    512        0  37148052.0 26195777       0.000             0
+AllUsers    16086       0.239   1861        0  98764064.0 218012491       0.000             0
+
+USERS: bbrskim douglas elmer bbrprod swaban   
+HOSTS:  hequfarm/ dolefarm/ bulletfarm/ 
+ADMINISTRATORS:  homer cartaro 
+
+-------------------------------------------------------------------------------
+
+QUEUE: long
+  -- No description provided.  This is one of the default queues.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+175   12  Open:Active       -    -  1.0    -  2720   418  2302     0     0    0   154
+Interval for a host to accept two jobs is 0 seconds
+
+DEFAULT LIMITS: RUNLIMIT                
+ 30.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 7200.0 min
+
+ MEMLIMIT SWAPLIMIT
+      4 G      10 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.1    -     -       -     -    -     -     -     48M     -  
+ loadStop    -     -     -     -       -     -    -     -     -     16M     -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL
+FAIRSHARE_QUEUES:  short medium simuq long atlasq atl-analq
+USER_SHARES:  [atlasgrp, 37875] [babarAll, 7859] [cdmsALL, 2000] [exoprodgrp, 1500] [exousergrp, 550] [geantgrp, 3874] [glastdata, 854] [glastgrp, 366] [glastusers, 25320] [hpsprodgrp, 1000] [lcd, 600] [lcdprodgrp, 1100] [luxlz, 3500] [rpgrp, 500] [theorygrp, 4257] [AllUsers, 16086] 
+
+SHARE_INFO_FOR: long/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+babarAll     7859    2619.667      0        0         0.0        0       0.000             0
+geantgrp     3874    1291.333      0        0         0.0        0       0.000             0
+luxlz        3500    1166.667      0        0         0.0        0       0.000             0
+theorygrp    4257     798.824      0        0     11978.2        0       0.000             0
+cdmsALL      2000     666.667      0        0         0.0        0       0.000             0
+lcdprodgrp   1100     366.667      0        0         0.0        0       0.000             0
+hpsprodgrp   1000     333.333      0        0         0.0        0       0.000             0
+glastdata     854     265.702      0        0      1101.2        0       0.000             0
+exoprodgrp   1500     259.831      0        0     14261.1        0       0.000             0
+lcd           600     200.000      0        0         0.0        0       0.000             0
+exousergrp    550     183.333      0        0         0.0        0       0.000             0
+rpgrp         500     166.667      0        0         0.0        0       0.000             0
+glastgrp      366     121.945      0        0         7.0        0       0.000             0
+glastusers  25320       5.525    551        0   8385345.5  6665185       0.000             0
+atlasgrp    37875       2.734    512        0  37148052.0 26195777       0.000             0
+AllUsers    16086       0.239   1861        0  98764064.0 218012491       0.000             0
+
+USERS: all  
+HOSTS:  hequfarm+1 dolefarm+1 kisofarm+1 deftcentosfarm+1 bubblefarm+1 bulletfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: atlasq
+  -- Atlas queue for quick turnaround. Maximum 177.6 hours CPU time [SLAC units]
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+172   15  Open:Active     500    -  1.0    -  1319   844   475     0     0    0   235
+Interval for a host to accept two jobs is 0 seconds
+
+DEFAULT LIMITS: RUNLIMIT                
+ 5760.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 10080.0 min
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.1    -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL
+FAIRSHARE_QUEUES:  short medium simuq long atlasq atl-analq
+USER_SHARES:  [atlasgrp, 37875] [babarAll, 7859] [cdmsALL, 2000] [exoprodgrp, 1500] [exousergrp, 550] [geantgrp, 3874] [glastdata, 854] [glastgrp, 366] [glastusers, 25320] [hpsprodgrp, 1000] [lcd, 600] [lcdprodgrp, 1100] [luxlz, 3500] [rpgrp, 500] [theorygrp, 4257] [AllUsers, 16086] 
+
+SHARE_INFO_FOR: atlasq/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+babarAll     7859    2619.667      0        0         0.0        0       0.000             0
+geantgrp     3874    1291.333      0        0         0.0        0       0.000             0
+luxlz        3500    1166.667      0        0         0.0        0       0.000             0
+theorygrp    4257     798.824      0        0     11978.2        0       0.000             0
+cdmsALL      2000     666.667      0        0         0.0        0       0.000             0
+lcdprodgrp   1100     366.667      0        0         0.0        0       0.000             0
+hpsprodgrp   1000     333.333      0        0         0.0        0       0.000             0
+glastdata     854     265.702      0        0      1101.2        0       0.000             0
+exoprodgrp   1500     259.831      0        0     14261.1        0       0.000             0
+lcd           600     200.000      0        0         0.0        0       0.000             0
+exousergrp    550     183.333      0        0         0.0        0       0.000             0
+rpgrp         500     166.667      0        0         0.0        0       0.000             0
+glastgrp      366     121.945      0        0         7.0        0       0.000             0
+glastusers  25320       5.525    551        0   8385345.5  6665185       0.000             0
+atlasgrp    37875       2.734    512        0  37148052.0 26195777       0.000             0
+AllUsers    16086       0.239   1861        0  98764064.0 218012491       0.000             0
+
+USERS: atlasgrp/   
+HOSTS:  hequfarm+1 dolefarm+1 kisofarm+1 deftcentosfarm+1 bubblefarm+1 bulletfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: atl-analq
+  -- Atlas Analysis queue for quick turnaround. Maximum 177.6 hours CPU time [SLAC units]
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+171   15  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+Interval for a host to accept two jobs is 0 seconds
+
+DEFAULT LIMITS: RUNLIMIT                
+ 5760.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 10080.0 min
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.1    -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL
+FAIRSHARE_QUEUES:  short medium simuq long atlasq atl-analq
+USER_SHARES:  [atlasgrp, 37875] [babarAll, 7859] [cdmsALL, 2000] [exoprodgrp, 1500] [exousergrp, 550] [geantgrp, 3874] [glastdata, 854] [glastgrp, 366] [glastusers, 25320] [hpsprodgrp, 1000] [lcd, 600] [lcdprodgrp, 1100] [luxlz, 3500] [rpgrp, 500] [theorygrp, 4257] [AllUsers, 16086] 
+
+SHARE_INFO_FOR: atl-analq/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+babarAll     7859    2619.667      0        0         0.0        0       0.000             0
+geantgrp     3874    1291.333      0        0         0.0        0       0.000             0
+luxlz        3500    1166.667      0        0         0.0        0       0.000             0
+theorygrp    4257     798.824      0        0     11978.2        0       0.000             0
+cdmsALL      2000     666.667      0        0         0.0        0       0.000             0
+lcdprodgrp   1100     366.667      0        0         0.0        0       0.000             0
+hpsprodgrp   1000     333.333      0        0         0.0        0       0.000             0
+glastdata     854     265.702      0        0      1101.2        0       0.000             0
+exoprodgrp   1500     259.831      0        0     14261.1        0       0.000             0
+lcd           600     200.000      0        0         0.0        0       0.000             0
+exousergrp    550     183.333      0        0         0.0        0       0.000             0
+rpgrp         500     166.667      0        0         0.0        0       0.000             0
+glastgrp      366     121.945      0        0         7.0        0       0.000             0
+glastusers  25320       5.525    551        0   8385345.5  6665185       0.000             0
+atlasgrp    37875       2.734    512        0  37148052.0 26195777       0.000             0
+AllUsers    16086       0.239   1861        0  98764064.0 218012491       0.000             0
+
+USERS: atlasgrp/   
+HOSTS:  kisotemp+1 hequfarm+1 dolefarm+1 kisofarm+1 deftcentosfarm+1 bubblefarm+1 bulletfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: miniq
+  -- BaBar queue for skimming and mini-to-mini processing.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+169   15  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+ CPULIMIT                
+ 145000.0 min of slac
+ RUNLIMIT                
+ 1440.0 min
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.3    -     -       -     -    -     -     -     64M     -  
+ loadStop    -     -     -     -       -     -    -     -     -     16M     -  
+
+SCHEDULING POLICIES:  FAIRSHARE  EXCLUSIVE
+USER_SHARES:  [babarMerge, 1000] [babarTMMerge, 100] [babarSkim, 100] [babarTMSkim, 10] [AllUsers, 50] 
+
+SHARE_INFO_FOR: miniq/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+babarMerge   1000     333.333      0        0         0.0        0       0.000             0
+babarSkim     100      33.333      0        0         0.0        0       0.000             0
+babarTMMerge   100      33.333      0        0         0.0        0       0.000             0
+AllUsers       50      16.667      0        0         0.0        0       0.000             0
+babarTMSkim    10       3.333      0        0         0.0        0       0.000             0
+
+USERS: babarSkim/   
+HOSTS:  hequfarm/ dolefarm/ bulletfarm/ 
+ADMINISTRATORS:  homer cartaro 
+
+-------------------------------------------------------------------------------
+
+QUEUE: buildq
+  -- General Use Build Queue.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+161    6  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+
+ STACKLIMIT
+      8 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -   1000M     -  
+ loadStop    -     -     -     -       -     -    -     -     -    100M     -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: all  
+HOSTS:  buildfarm/ 
+RES_REQ:  rusage[swp=1200]
+
+-------------------------------------------------------------------------------
+
+QUEUE: bldlongq
+  -- For BaBar major builds - restricted.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+160    6  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+ CPULIMIT                
+ 2400.0 min of slac
+
+ STACKLIMIT
+      8 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.4   1.3    -       -     -    -     -     -   1000M     -  
+ loadStop    -     -     -     -       -     -    -     -     -    100M     -  
+
+SCHEDULING POLICIES:  FAIRSHARE  EXCLUSIVE
+USER_SHARES:  [drjohn, 9] [others, 1] 
+
+SHARE_INFO_FOR: bldlongq/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+drjohn          9       3.000      0        0         0.0        0       0.000             0
+others          1       0.333      0        0         0.0        0       0.000             0
+
+USERS: pachyderms/   
+HOSTS:  buildfarm/ 
+ADMINISTRATORS:  drjohn homer cartaro steinke 
+RES_REQ:  rusage[swp=1200]
+
+-------------------------------------------------------------------------------
+
+QUEUE: bldrecoq
+  -- For BaBar builds.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+150    6  Open:Active       -    -  1.0    -     1     1     0     0     0    0     1
+ CPULIMIT                
+ 500.0 min of slac
+
+ STACKLIMIT
+      8 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.4   1.3    -       -     -    -     -     -   1000M     -  
+ loadStop    -     -     -     -       -     -    -     -     -    100M     -  
+
+USERS: all  
+HOSTS:  buildfarm/ 
+ADMINISTRATORS:  homer cartaro 
+RES_REQ:  rusage[swp=1000]
+
+-------------------------------------------------------------------------------
+
+QUEUE: cryoem-daq
+  -- queue for ocio gpu machines
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+145    0  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+Interval for a host to accept two jobs is 0 seconds
+ RUNLIMIT                
+ 15.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+USERS: ociogpugrp/   
+HOSTS:  slacgpufarm/ cryoem-gpu50+1 
+
+-------------------------------------------------------------------------------
+
+QUEUE: slacgpu
+  -- queue for public gpu machines
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+140    0  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: slacgpugrp/   
+HOSTS:  slacgpufarm/ mlgpufarm/ 
+RES_REQ:  order[-ngpus]
+
+-------------------------------------------------------------------------------
+
+QUEUE: psnehhiprioq
+  -- LCLS Offline Processing Farm (NEH)
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+117    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 1440.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 43200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: lclsgrp/   
+HOSTS:  psnehfarm/ 
+ADMINISTRATORS:  wilko batyuk tjohnson snelson ddamiani cpo haelee mcbrowne mliang aegger sanghoon fpoitevi egaltier sioan mhunter2 jjoshi mchollet perazzo sboutet bnagler aquila 
+RES_REQ:  select[type==LINUX] span[ptile=16]
+PREEMPTION:  PREEMPTIVE[psnehprioq psnehq psnehidleq] 
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psfehhiprioq
+  -- LCLS Offline Processing Farm (FEH)
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+117    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 1440.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 43200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: lclsgrp/   
+HOSTS:  psfehfarm/ 
+ADMINISTRATORS:  wilko batyuk tjohnson snelson ddamiani cpo haelee mcbrowne mliang aegger sanghoon fpoitevi egaltier sioan mhunter2 jjoshi mchollet perazzo sboutet bnagler aquila 
+RES_REQ:  select[type==LINUX] span[ptile=16]
+PREEMPTION:  PREEMPTIVE[psfehprioq psfehq psfehidleq] 
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psnehprioq
+  -- LCLS Offline Processing Farm (NEH)
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+116    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 1440.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 43200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: lclsgrp/   
+HOSTS:  psnehfarm/ 
+ADMINISTRATORS:  wilko batyuk tjohnson snelson ddamiani cpo haelee mcbrowne mliang aegger sanghoon fpoitevi egaltier sioan mhunter2 jjoshi mchollet perazzo sboutet bnagler aquila 
+RES_REQ:  select[type==LINUX] span[ptile=16]
+PREEMPTION:  PREEMPTIVE[psnehq psnehidleq] PREEMPTABLE[psnehhiprioq]
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psfehprioq
+  -- LCLS Offline Processing Farm (FEH)
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+116    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 1440.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 43200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: lclsgrp/   
+HOSTS:  psfehfarm/ 
+ADMINISTRATORS:  wilko batyuk tjohnson snelson ddamiani cpo haelee mcbrowne mliang aegger sanghoon fpoitevi egaltier sioan mhunter2 jjoshi mchollet perazzo sboutet bnagler aquila 
+RES_REQ:  select[type==LINUX] span[ptile=16]
+PREEMPTION:  PREEMPTIVE[psfehq psfehidleq] PREEMPTABLE[psfehhiprioq]
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psnehq
+  -- LCLS Offline Processing Farm (NEH)
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+115    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 2880.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 43200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  FAIRSHARE  EXCLUSIVE  RESOURCE_RESERVE
+FAIRSHARE_QUEUES:  psnehq psfehq
+USER_SHARES:  [lclsgrp, 50] 
+
+SHARE_INFO_FOR: psnehq/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+lclsgrp        50      16.667      0        0         0.0        0       0.000             0
+
+USERS: lclsgrp/   
+HOSTS:  psnehfarm/ 
+ADMINISTRATORS:  wilko batyuk tjohnson snelson ddamiani cpo haelee mcbrowne mliang aegger sanghoon fpoitevi egaltier sioan mhunter2 jjoshi mchollet perazzo sboutet bnagler aquila 
+RES_REQ:  select[type==LINUX] span[ptile=16]
+Maximum resource reservation time: 86400 seconds
+PREEMPTION:  PREEMPTIVE[psnehidleq] PREEMPTABLE[psnehprioq psnehhiprioq]
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psfehq
+  -- LCLS Offline Processing Farm (FEH)
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+115    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 2880.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 43200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  FAIRSHARE  EXCLUSIVE  RESOURCE_RESERVE
+FAIRSHARE_QUEUES:  psnehq psfehq
+USER_SHARES:  [lclsgrp, 50] 
+
+SHARE_INFO_FOR: psfehq/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+lclsgrp        50      16.667      0        0         0.0        0       0.000             0
+
+USERS: lclsgrp/   
+HOSTS:  psfehfarm/ 
+ADMINISTRATORS:  wilko batyuk tjohnson snelson ddamiani cpo haelee mcbrowne mliang aegger sanghoon fpoitevi egaltier sioan mhunter2 jjoshi mchollet perazzo sboutet bnagler aquila 
+RES_REQ:  select[type==LINUX] span[ptile=16]
+Maximum resource reservation time: 86400 seconds
+PREEMPTION:  PREEMPTIVE[psfehidleq] PREEMPTABLE[psfehprioq psfehhiprioq]
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psdebugq
+  -- LCLS debug queue...10 minute jobs only
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+114    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+ RUNLIMIT                
+ 600.0 min
+
+ HOSTLIMIT_PER_JOB       
+ 2
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: lclsgrp/   
+HOSTS:  psanafarm/ 
+ADMINISTRATORS:  wilko batyuk snelson cpo mcbrowne yoon82 mliang aegger omarq sanghoon fpoitevi mhunter2 jjoshi mchollet perazzo sboutet aquila 
+RES_REQ:  select[type==LINUX] span[ptile=12]
+PREEMPTION:  PREEMPTIVE[psanaq] 
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psanaprioq
+  -- LCLS Offline Processing
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+113    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 2880.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 43200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+USER_SHARES:  [lclsgrp, 50] 
+
+SHARE_INFO_FOR: psanaprioq/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+lclsgrp        50      16.667      0        0         0.0        0       0.000             0
+
+USERS: lclsgrp/   
+HOSTS:  psanafarm/ 
+ADMINISTRATORS:  wilko batyuk snelson cpo mcbrowne yoon82 mliang aegger omarq sanghoon fpoitevi mhunter2 jjoshi mchollet perazzo sboutet aquila 
+RES_REQ:  select[type==LINUX] span[ptile=12]
+Maximum resource reservation time: 86400 seconds
+PREEMPTION:  PREEMPTIVE[psanaq] 
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psanaq
+  -- LCLS Offline Processing
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+112    0  Open:Active       -    -    -    -     2     0     0     2     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 2880.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 43200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+USER_SHARES:  [lclsgrp, 50] 
+
+SHARE_INFO_FOR: psanaq/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+lclsgrp        50      16.667      0        0         0.0        0       0.000             0
+
+USERS: lclsgrp/   
+HOSTS:  psanafarm/ 
+ADMINISTRATORS:  wilko batyuk snelson cpo mcbrowne yoon82 mliang aegger omarq sanghoon fpoitevi mhunter2 jjoshi mchollet perazzo sboutet aquila 
+RES_REQ:  select[type==LINUX] span[ptile=12]
+Maximum resource reservation time: 86400 seconds
+PREEMPTION:  PREEMPTIVE[psanaidleq] PREEMPTABLE[psdebugq psanaprioq]
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: sdcgpuq
+  -- SSRL SDC queue for gpu jobs
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+110    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+USERS: renata sdcgrp/   
+HOSTS:  sdc01 sdc02 sdc03 
+
+-------------------------------------------------------------------------------
+
+QUEUE: beamphysics
+  -- Beam Physics Queue.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 98    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: beamphysgrp/   
+HOSTS:  oakfarm/ 
+RES_REQ:  span[]
+PREEMPTION:  PREEMPTIVE[idle] 
+
+-------------------------------------------------------------------------------
+
+QUEUE: suncat-test
+  -- SUNCAT MPI Test Queue.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 91    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+ RUNLIMIT                
+ 10.0 min
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: suncat-high/ suncat-norm/   
+HOSTS:  suncattest/ 
+ADMINISTRATORS:  vossj 
+RES_REQ:  select[type==LINUX] span[]
+
+-------------------------------------------------------------------------------
+
+QUEUE: suncat3
+  -- SUNCAT Long MPI Queue for 16 core farm.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 88    0  Open:Active       -    -    -    -   192     0   192     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 15.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 3000.0 min
+ TASKLIMIT               
+ 256
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+FAIRSHARE_QUEUES:  suncat suncat3 suncat3-xlong suncat2 suncat-xlong suncat2-xlong
+USER_SHARES:  [suncat-norm, 1000] [others, 1] 
+
+SHARE_INFO_FOR: suncat3/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+others          1       0.333      0        0         0.0        0       0.000             0
+suncat-norm  1000       0.017    872        0 207702048.0 84748508       0.000             0
+
+USERS: suncat-high/ suncat-norm/   
+HOSTS:  suncat16core/ 
+ADMINISTRATORS:  vossj 
+RES_REQ:  same[model] span[ptile=16]
+Maximum resource reservation time: 45000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: suncat3-xlong
+  -- SUNCAT XLong Job MPI Queue for 16 core farm.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 84    0  Open:Active     200    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 15.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 28800.0 min
+ TASKLIMIT               
+ 200
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+FAIRSHARE_QUEUES:  suncat suncat3 suncat3-xlong suncat2 suncat-xlong suncat2-xlong
+USER_SHARES:  [suncat-norm, 1000] [others, 1] 
+
+SHARE_INFO_FOR: suncat3-xlong/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+others          1       0.333      0        0         0.0        0       0.000             0
+suncat-norm  1000       0.017    872        0 207702048.0 84748508       0.000             0
+
+USERS: suncat-high/ suncat-norm/   
+HOSTS:  suncat16core/ 
+ADMINISTRATORS:  vossj 
+RES_REQ:  same[model] span[ptile=16]
+Maximum resource reservation time: 45000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: suncat2
+  -- SUNCAT Long MPI Queue for 12 core farm.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 82    0  Open:Active       -    -    -    -   384     0   384     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 15.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 3000.0 min
+ TASKLIMIT               
+ 256
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+FAIRSHARE_QUEUES:  suncat suncat3 suncat3-xlong suncat2 suncat-xlong suncat2-xlong
+USER_SHARES:  [suncat-norm, 1000] [others, 1] 
+
+SHARE_INFO_FOR: suncat2/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+others          1       0.333      0        0         0.0        0       0.000             0
+suncat-norm  1000       0.017    872        0 207702048.0 84748508       0.000             0
+
+USERS: suncat-high/ suncat-norm/   
+HOSTS:  suncat12core/ 
+ADMINISTRATORS:  vossj 
+RES_REQ:  same[model] span[ptile=12]
+Maximum resource reservation time: 45000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: suncat
+  -- SUNCAT Long MPI Queue for 8 core farm.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 81    0  Open:Active       -    -    -    -   296     0   296     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 15.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 3000.0 min
+ TASKLIMIT               
+ 256
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+FAIRSHARE_QUEUES:  suncat suncat3 suncat3-xlong suncat2 suncat-xlong suncat2-xlong
+USER_SHARES:  [suncat-norm, 1000] [others, 1] 
+
+SHARE_INFO_FOR: suncat/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+others          1       0.333      0        0         0.0        0       0.000             0
+suncat-norm  1000       0.017    872        0 207702048.0 84748508       0.000             0
+
+USERS: suncat-high/ suncat-norm/   
+HOSTS:  suncat8core/ 
+ADMINISTRATORS:  vossj 
+RES_REQ:  same[model] span[ptile=8]
+Maximum resource reservation time: 45000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: suncat-xlong
+  -- SUNCAT XLong Job MPI Queue.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 74    0  Open:Active     700    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 15.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 28800.0 min
+ TASKLIMIT               
+ 256
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+FAIRSHARE_QUEUES:  suncat suncat3 suncat3-xlong suncat2 suncat-xlong suncat2-xlong
+USER_SHARES:  [suncat-norm, 1000] [others, 1] 
+
+SHARE_INFO_FOR: suncat-xlong/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+others          1       0.333      0        0         0.0        0       0.000             0
+suncat-norm  1000       0.017    872        0 207702048.0 84748508       0.000             0
+
+USERS: suncat-high/ suncat-norm/   
+HOSTS:  suncat8core/ 
+ADMINISTRATORS:  vossj 
+RES_REQ:  same[model] span[ptile=8]
+Maximum resource reservation time: 45000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: suncat2-xlong
+  -- SUNCAT XLong Job MPI Queue for 12 core farm.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 73    0  Open:Active     200    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 15.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 28800.0 min
+ TASKLIMIT               
+ 200
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE  BACKFILL  EXCLUSIVE  RESOURCE_RESERVE
+FAIRSHARE_QUEUES:  suncat suncat3 suncat3-xlong suncat2 suncat-xlong suncat2-xlong
+USER_SHARES:  [suncat-norm, 1000] [others, 1] 
+
+SHARE_INFO_FOR: suncat2-xlong/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+others          1       0.333      0        0         0.0        0       0.000             0
+suncat-norm  1000       0.017    872        0 207702048.0 84748508       0.000             0
+
+USERS: suncat-high/ suncat-norm/   
+HOSTS:  suncat12core/ 
+ADMINISTRATORS:  vossj 
+RES_REQ:  same[model] span[ptile=12]
+Maximum resource reservation time: 45000 seconds
+
+-------------------------------------------------------------------------------
+
+QUEUE: suncat-gpu
+  -- SUNCAT GPU Queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 71    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: yemi suncat-high/ suncat-norm/   
+HOSTS:  suncatgpufarm/ 
+ADMINISTRATORS:  vossj 
+RES_REQ:  same[model]
+
+-------------------------------------------------------------------------------
+
+QUEUE: psnehidleq
+  -- PCDS LCLS NEH Idle Queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 70    0  Closed:Active     -    -    -    -     0     0     0     0     0    0     0
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: vanilla suncat-high/ suncat-norm/ lclsgrp/   
+HOSTS:  psnehfarm/ 
+ADMINISTRATORS:  wilko batyuk tjohnson snelson ddamiani cpo haelee mcbrowne mliang aegger sanghoon fpoitevi egaltier sioan mhunter2 jjoshi mchollet perazzo sboutet bnagler aquila 
+RES_REQ:  span[ptile=16]
+PREEMPTION:  PREEMPTABLE[psnehq psnehprioq psnehhiprioq]
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psfehidleq
+  -- PCDS LCLS FEH Suncat Idle Queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 70    0  Closed:Active     -    -    -    -     0     0     0     0     0    0     0
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: vanilla suncat-high/ suncat-norm/ lclsgrp/   
+HOSTS:  psfehfarm/ 
+ADMINISTRATORS:  wilko batyuk tjohnson snelson ddamiani cpo haelee mcbrowne mliang aegger sanghoon fpoitevi egaltier sioan mhunter2 jjoshi mchollet perazzo sboutet bnagler aquila 
+RES_REQ:  span[ptile=16]
+PREEMPTION:  PREEMPTABLE[psfehq psfehprioq psfehhiprioq]
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: psanaidleq
+  -- LCLS Offline Processing
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 70    0  Closed:Active     -    -    -    -     0     0     0     0     0    0     0
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -     10G     -  
+ loadStop    -     -     -     -       -     -    -     -     -     10G     -  
+
+SCHEDULING POLICIES:  EXCLUSIVE
+
+USERS: suncat-high/ suncat-norm/ lclsgrp/   
+HOSTS:  psanafarm/ 
+ADMINISTRATORS:  wilko batyuk snelson cpo mcbrowne yoon82 mliang aegger omarq sanghoon fpoitevi mhunter2 jjoshi mchollet perazzo sboutet aquila 
+RES_REQ:  select[type==LINUX] span[ptile=12]
+PREEMPTION:  PREEMPTABLE[psanaq]
+JOB_CONTROLS:
+    TERMINATE    [kill -CONT -$LSB_JOBRES_PID -$LSB_PAMPID; kill -TERM -$LSB_JOBRES_PID -$LSB_PAMPID]
+
+
+-------------------------------------------------------------------------------
+
+QUEUE: atlas-t3
+  -- EPP Atlas Proof Queue
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 65    0  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 30.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 5760.0 min
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+USERS: atlas-t3/   
+HOSTS:  atlprffarm1/ atlprffarm2/ 
+
+-------------------------------------------------------------------------------
+
+QUEUE: osgq
+  -- Open Science Grid production queue.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+ 65   15  Open:Active       -    -    -    -     0     0     0     0     0    0     0
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+USERS: shoeche glastraw OG/   
+HOSTS:  osgfarm/ 
+
+-------------------------------------------------------------------------------
+
+QUEUE: idle
+  -- Scheduled only when light load; suspended by any other jobs.  This is one of the default queues.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+  5   20  Open:Active      50   10  1.0    -     0     0     0     0     0    0     0
+ RUNLIMIT                
+ 720.0 min
+
+ MEMLIMIT SWAPLIMIT
+      4 G      10 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  FAIRSHARE
+USER_SHARES:  [AllUsers, 500] 
+
+SHARE_INFO_FOR: idle/
+ USER/GROUP   SHARES  PRIORITY  STARTED  RESERVED  CPU_TIME  RUN_TIME   ADJUST  GPU_RUN_TIME
+AllUsers      500     166.667      0        0         0.0        0       0.000             0
+
+USERS: all  
+HOSTS:  genfarm/ oakfarm/ suncatfarm/ awsfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+PREEMPTION:  PREEMPTABLE
+
+-------------------------------------------------------------------------------
+
+QUEUE: bubble
+  -- queue for fermi bubble hosts
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+  1    0  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 30.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 7200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+USERS: all  
+HOSTS:  bubblefarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: centos7
+  -- queue for centos7
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+  1    0  Open:Active       -    -  1.0    -     0     0     0     0     0    0     0
+
+DEFAULT LIMITS: RUNLIMIT                
+ 30.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 7200.0 min
+
+ CORELIMIT
+      0 M 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -     -     -     -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+USERS: all  
+HOSTS:  deftcentosfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: xlong
+  -- Jobs submitted to xlong actually run in the long queue.  This is one of the default queues.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+  1   15  Open:Active    6500    -  1.0    -     0     0     0     0     0    0     0
+Interval for a host to accept two jobs is 0 seconds
+
+DEFAULT LIMITS: RUNLIMIT                
+ 30.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 7200.0 min
+
+ MEMLIMIT SWAPLIMIT
+      4 G      10 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.1    -     -       -     -    -     -     -     64M     -  
+ loadStop    -     -     -     -       -     -    -     -     -     16M     -  
+
+SCHEDULING POLICIES:  BACKFILL
+
+USERS: all  
+HOSTS:  hequfarm+1 dolefarm+1 kisofarm+1 deftcentosfarm+1 bubblefarm+1 bulletfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
+-------------------------------------------------------------------------------
+
+QUEUE: xxl
+  -- Jobs submitted to xxl actually run in the long queue.  This is one of the default queues.
+
+PARAMETERS/STATISTICS
+PRIO NICE STATUS          MAX JL/U JL/P JL/H NJOBS  PEND   RUN SSUSP USUSP  RSV PJOBS 
+  1   18  Open:Active    2000 1000  1.0    -     0     0     0     0     0    0     0
+Interval for a host to accept two jobs is 0 seconds
+
+DEFAULT LIMITS: RUNLIMIT                
+ 30.0 min
+
+MAXIMUM LIMITS: RUNLIMIT                
+ 7200.0 min
+
+ MEMLIMIT SWAPLIMIT
+      4 G      10 G 
+
+SCHEDULING PARAMETERS
+           r15s   r1m  r15m   ut      pg    io   ls    it    tmp    swp    mem
+ loadSched   -    1.1   1.5    -       -     -    -     -     -      -      -  
+ loadStop    -     -     -     -       -     -    -     -     -      -      -  
+
+SCHEDULING POLICIES:  BACKFILL
+
+USERS: all  
+HOSTS:  hequfarm+1 dolefarm+1 kisofarm+1 deftcentosfarm+1 bubblefarm+1 bulletfarm/ 
+RES_REQ:  affinity[core:membind=localprefer]
+
