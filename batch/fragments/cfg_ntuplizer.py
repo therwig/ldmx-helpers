@@ -1,4 +1,7 @@
+#!/bin/python3
 import os
+import json
+
 from LDMX.Framework import ldmxcfg
 
 # Create a process with pass name "recon"

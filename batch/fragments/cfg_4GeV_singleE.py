@@ -1,6 +1,5 @@
 #!/bin/python3
 import os
-import sys
 import json
 
 from LDMX.Framework import ldmxcfg
