@@ -6,6 +6,8 @@ import os
 import glob
 from math import ceil
 
+def div_round_up(n,d): return (n+d-1)//d
+
 def setupJob(args):
     '''
     write a submission diretory
@@ -17,7 +19,7 @@ def setupJob(args):
     # setup directories (submit + output)
     wd = os.getcwd()
     subDir = wd + "/job_submissions/" + args.name
-    outDir = args.output
+    outDir = args.output + "/" + args.name
     os.makedirs(subDir,exist_ok=False)
     os.makedirs(outDir,exist_ok=False)
     os.makedirs(outDir+"/logs",exist_ok=False)
@@ -33,9 +35,10 @@ def setupJob(args):
 
     # collect input files
     if filelist:
-        print('inputs:',filelist)
+        print('Collected',len(filelist),'inputs (truncating after first ten entries):',filelist[:10])
         if type(filelist) is str and '*' in filelist:
             filelist = glob.glob(filelist)
+            print('Expanded WC to',len(filelist),'inputs')
         if testRun:
             nJobs=min(3,len(filelist))
             filelist = filelist[:nJobs]
@@ -43,13 +46,22 @@ def setupJob(args):
             nFilesPerJob = 1
         nFiles=len(filelist)
         if nFilesPerJob: nJobs = ceil(float(nFiles)/nFilesPerJob)
-        with open(subDir+'/filelist.py','w') as f:
+        else: nFilesPerJob = div_round_up(nFiles,nJobs)
+        print('Splitting into',nJobs,'jobs')
+        os.makedirs(subDir+"/filelists",exist_ok=False)
+        with open(subDir+'/filelists/filelist.py','w') as f:
             f.write( 'filelist = '+filelist.__repr__() )
+        for ijob in range(nJobs):
+            flist = filelist[ijob*nFilesPerJob:(ijob+1)*nFilesPerJob]
+            with open(subDir+'/filelists/filelist.{}.txt'.format(ijob+1),'w') as f:
+                for fi in flist:
+                    f.write(fi+'\n')
     else:
         if testRun:
             nJobs=3
             nEventsPerJob=100
         if(nJobs==0): exit("must provide nJobs or input list!")
+        if nEventsPerJob <=0: exit("Must specify nEventsPerJob!")
 
 
     # write the run script (e.g. everything that we'd like to log)
@@ -77,7 +89,13 @@ def setupJob(args):
         f.write('subDir="{}"\n'.format(subDir))
         f.write('cp $subDir/setup_ldmx.sh .\n')
         f.write('cp $subDir/run_wrapper.sh .\n')
-        f.write('if [ -f $subDir/filelist.py ]; then cp $subDir/filelist.py .; fi\n')
+        # f.write('let "LSB_JOBINDEX_ZERO_IDX = LSB_JOBINDEX-1"\n')
+        #f.write('if [ -f $subDir/filelist.py ]; then cp $subDir/filelist.py .; fi\n')
+        #f.write('if [ -f $subDir/filelists/filelist.${LSB_JOBINDEX_ZERO_IDX}.py ]; then cp $subDir/filelists/filelist.${LSB_JOBINDEX_ZERO_IDX}.py filelist.py; fi\n')
+        ### COPY INPUT FILES
+        f.write('mkdir ./input_files\n')
+        f.write('if [ -f $subDir/filelists/filelist.${LSB_JOBINDEX}.txt ]; then cp $subDir/filelists/filelist.${LSB_JOBINDEX}.txt input_files/filelist.txt; fi\n')
+        f.write('if [ -f input_files/filelist.txt ]; then while read line; do   cp "$line" input_files/; done < input_files/filelist.txt; fi\n')
         f.write('cp $subDir/cfg.py .\n')
         f.write('source setup_ldmx.sh\n')
         # run the payload with logging
@@ -123,7 +141,7 @@ if __name__== "__main__":
     parser.add_argument('-n',"--name", default='', help="job name")
     parser.add_argument('-o',"--output", default='', help="path to output files")
     parser.add_argument("--nFilesPerJob", type=int, default=0, help="number of input files per job")
-    parser.add_argument("--nEventsPerJob", type=int, default=1, help="number of events per job")
+    parser.add_argument("--nEventsPerJob", type=int, default=-1, help="number of events per job")
     parser.add_argument("--nJobs", type=int, default=0, help="number of jobs to send")
     parser.add_argument("--seedOffset", type=int, default=0, help="offset to be applied to each of the job random seeds")
     parser.add_argument("--test", action='store_true', default=False, help="run 3x100 event test jobs")

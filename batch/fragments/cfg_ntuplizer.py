@@ -1,6 +1,7 @@
 #!/bin/python3
 import os
 import json
+import glob
 
 from LDMX.Framework import ldmxcfg
 
@@ -30,7 +31,7 @@ p.sequence=[trigger_ana]
 
 def div_round_up(n,d): return (n+d-1)//d
 
-nEvents=100
+nEvents=-1
 outfile='out.root'
 nJobs=1
 jobNo=0
@@ -40,11 +41,26 @@ if 'BATCH_NEVENTS' in env: nEvents = int(env['BATCH_NEVENTS'])
 if 'BATCH_OUTFILE' in env: outfile = env['BATCH_OUTFILE']
 if 'BATCH_NJOBS' in env: nJobs     = int(env['BATCH_NJOBS'])
 if 'LSB_JOBINDEX' in env: jobNo    = int(env['LSB_JOBINDEX'])-1
-if os.path.exists("filelist.py"):
-    from filelist import filelist
-    files_per_job = div_round_up(len(filelist),nJobs)
-    infiles = filelist[jobNo*files_per_job: (jobNo+1)*files_per_job]
+infiles = glob.glob('input_files/*.root')
+# if os.path.exists("filelist.py"):
+#     print("Reading from filelist.py. Copying locally.")
+#     from filelist import filelist
+#     os.makedirs("./input_files",exist_ok=True)
+#     for f in filelist:
+        
+        
+    # print("  nEvents =",nEvents)
+    # print("  outfile =",outfile)
+    # print("  nJobs   =",nJobs  )
+    # print("  jobNo   =",jobNo  )
+    # from filelist import filelist
+    # files_per_job = div_round_up(len(filelist),nJobs)
+    # infiles = filelist[jobNo*files_per_job: (jobNo+1)*files_per_job]
+    # print("Found filelist with",len(filelist),"entries. Indexing from",jobNo*files_per_job,"to",(jobNo+1)*files_per_job)
+# else:
+    # print("Unable to locate filelist")
 
+print("Running over",len(infiles),"files")
 p.inputFiles    = infiles
 p.histogramFile = outfile
 p.maxEvents     = nEvents
