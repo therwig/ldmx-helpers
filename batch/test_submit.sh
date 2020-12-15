@@ -1,15 +1,16 @@
+# Run generation for eN events
+# 1000 x 2 hours
+python submitter.py \
+    -f fragments/cfg_4GeV_eN.py \
+    -o /nfs/slac/g/ldmx/data/mc/v12/4_gev_incl_tp/ \
+    -n 201212_njob_1000_nEvt_200_v1 \
+    --nJobs 1000 --nEventsPerJob 10000000 
 
-n=11
-# python submitter.py \
-#     -f fragments/cfg_4GeV_singleE.py \
-#     -o /gpfs/slac/atlas/fs1/u/therwig/ldmx/sandbox/ldmx-helpers/batch/myOutDir$n \
-#     -n myJobName$n \
-#     --test
-
+# run ntuplizer with eN inputs
 python submitter.py \
     -f fragments/cfg_ntuplizer.py \
-    -i /gpfs/slac/atlas/fs1/u/therwig/ldmx/sandbox/ldmx-helpers/batch/myOutDir5/out.*root \
-    -o /gpfs/slac/atlas/fs1/u/therwig/ldmx/sandbox/ldmx-helpers/batch/myNtupOutDir$n \
-    -n myNtupJobName$n \
-    --nEventsPerJob 100 \
-    --nJobs=1 #--noSubmit
+    -i /nfs/slac/g/ldmx/data/mc/v12/4_gev_incl_tp/201212_njob_1000_nEvt_200_v1/*root \
+    -o /nfs/slac/g/ldmx/data/mc/v12/4_gev_incl_tp \
+    -n 201212_njob_1000_nEvt_200_v1_NTUPv1 \
+    --nFilesPerJob 10
+
