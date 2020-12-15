@@ -1,13 +1,21 @@
+
+### Example generation for eN events
+
+Generate events from scratch (1000 x 2 hour jobs)
 ```
-scl enable devtoolset-8 bash
-source ~/.bash_profile
-source ~/ldmx/local_setup.sh
-
-python run_ldmx_app.py /nfs/slac/g/ldmx/users/therwig/sandbox/ldmx-sw/run/batchtest/config.py.tpl --envScript /nfs/slac/g/ldmx/users/therwig/local_setup.sh --eventOut /nfs/slac/g/ldmx/users/therwig/sandbox/ldmx-sw/run/batchtest/ThisIsMyPrefix --histOut /nfs/slac/g/ldmx/users/therwig/sandbox/ldmx-sw/run/batchtest/ThisIsMyPrefix --prefix ThisIsMyPrefix_7052a46c
-
-python ldmx_bsub.py sample.yml -t
-
-python ldmx_bsub.py sample.yml
+python submitter.py \
+    -f fragments/cfg_4GeV_eN.py \
+    -o /nfs/slac/g/ldmx/data/mc/v12/4_gev_incl_tp/ \
+    -n 201212_njob_1000_nEvt_200_v1 \
+    --nJobs 1000 --nEventsPerJob 10000000 
 ```
 
-Something like 1k * 10k events.
+Run ntuplizer with eN inputs
+```
+python submitter.py \
+    -f fragments/cfg_ntuplizer.py \
+    -i /nfs/slac/g/ldmx/data/mc/v12/4_gev_incl_tp/201212_njob_1000_nEvt_200_v1/*root \
+    -o /nfs/slac/g/ldmx/data/mc/v12/4_gev_incl_tp \
+    -n 201212_njob_1000_nEvt_200_v1_NTUPv1 \
+    --nFilesPerJob 10
+```
