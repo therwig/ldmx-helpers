@@ -6,7 +6,7 @@ float calcPx(float x_targ, float x_ecal, float e, float offset=0){
 }
 float calcPy(float y_targ, float y_ecal, float e, float offset=0){ return 17.8*(e/4000.)*(y_ecal-y_targ)+offset; }
 float calcPt(float x_targ, float x_ecal, float y_targ, float y_ecal, float e, float offx=0, float offy=0){
-    return sqrt(pow(calcPx(x_targ, x_ecal, e, offx),2)+calcPy(y_targ, y_ecal, e, offy));
+    return sqrt(pow(calcPx(x_targ, x_ecal, e, offx),2)+pow(calcPy(y_targ, y_ecal, e, offy),2));
 }
 void RunDisplay(int entry, int mode=0){
     TFile* f = new TFile("combo.root","read");
