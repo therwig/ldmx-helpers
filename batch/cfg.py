@@ -27,7 +27,7 @@ trigger_ana.storeECalSimHit   = False
 trigger_ana.runAnalysis       = False
 
 ## enable |py| skimming
-if False:
+if True:
      # trigger_ana.maxPyFilter    = 400.
      # trigger_ana.skimCollection = "3d"
      trigger_ana.storeECalTrigDigi = True

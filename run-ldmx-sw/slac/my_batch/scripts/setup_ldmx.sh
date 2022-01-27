@@ -1,0 +1,1 @@
+/gpfs/slac/atlas/fs1/u/therwig/setup_ldmx.sh

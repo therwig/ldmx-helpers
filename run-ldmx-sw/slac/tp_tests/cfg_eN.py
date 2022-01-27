@@ -14,6 +14,16 @@ import LDMX.Ecal.ecal_hardcoded_conditions
 
 from LDMX.SimCore import simulator
 from LDMX.SimCore import generators
+from LDMX.Biasing import target
+
+targ_en = target.electro_nuclear('ldmx-det-v12', generators.single_4gev_e_upstream_tagger())
+targ_en.biasing_threshold = 3500.
+targ_en.biasing_factor = 1
+targ_en.biasing_particle = 'e-'
+targ_en.actions[1].volume = 'target_PV'
+targ_en.actions[1].recoilThreshold = 3500.
+sim = targ_en
+
 # sim = simulator.simulator("mySim")
 # sim.setDetector( 'ldmx-det-v12', True  )
 # sim.description = "ECal photo-nuclear, xsec bias 450"
@@ -29,19 +39,19 @@ from LDMX.SimCore import generators
 #                 filters.EcalProcessFilter(), 
 #                 filters.TrackProcessFilter.photo_nuclear() ]
 
-myGun = generators.gun('myGun')
-myGun.particle = 'e-' 
-myGun.position = [ 0., 0., -1.2 ]  # mm
-myGun.direction = [ 0., 0., 1] 
-myGun.energy = 4.0 # GeV
-myGen = myGun
-sim = simulator.simulator("SingleE")
-sim.setDetector( 'ldmx-det-v12' , True )
-sim.runNumber = 0
-sim.description = "Single electron gun"
-sim.randomSeeds = [ 2*p.run , 2*p.run+1 ]
-sim.beamSpotSmear = [20., 80., 0.] #mm
-sim.generators.append(myGen)
+# myGun = generators.gun('myGun')
+# myGun.particle = 'e-' 
+# myGun.position = [ 0., 0., -1.2 ]  # mm
+# myGun.direction = [ 0., 0., 1] 
+# myGun.energy = 4.0 # GeV
+# myGen = myGun
+# sim = simulator.simulator("SingleE")
+# sim.setDetector( 'ldmx-det-v12' , True )
+# sim.runNumber = 0
+# sim.description = "Single electron gun"
+# sim.randomSeeds = [ 2*p.run , 2*p.run+1 ]
+# sim.beamSpotSmear = [20., 80., 0.] #mm
+# sim.generators.append(myGen)
 
 
 from LDMX.EventProc.trigScintDigis import TrigScintDigiProducer
@@ -74,8 +84,8 @@ p.sequence=[ sim,
              ldmxcfg.Producer('trackerVeto' ,'ldmx::TrackerVetoProcessor'  ,'EventProc')
 ]
 
-p.outputFiles=["simoutput.root"]
-p.maxEvents = 1000
+p.outputFiles=["simoutput_eN.root"]
+p.maxEvents = 10*1000*1000
 with open('parameterDump.json', 'w') as outfile:
      json.dump(p.parameterDump(),  outfile, indent=4)
 

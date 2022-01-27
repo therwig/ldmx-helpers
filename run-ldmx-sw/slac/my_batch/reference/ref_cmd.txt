@@ -1,0 +1,4 @@
+bsub -R "select[centos7]" -q medium -W 2800 -J jobArray[1-10] scl enable devtoolset-8 "python /nfs/slac/g/ldmx/users/therwig/sandbox/ldmx-sw/run/tp_tests/batch/run_ldmx_app.py /nfs/slac/g/ldmx/users/therwig/sandbox/ldmx-sw/run/tp_tests/batch/config.py.tpl --envScript /nfs/slac/g/ldmx/users/therwig/local_setup.sh --eventOut /nfs/slac/g/ldmx/data/mc/v12/4_gev_incl_tp/SingleE_Oct8a --histOut /nfs/slac/g/ldmx/data/mc/v12/4_gev_incl_tp/SingleE_Oct8a --prefix SingleE_Oct8a_55acb1dd "
+
+
+https://www.ibm.com/support/knowledgecenter/SSWRJV_10.1.0/lsf_admin/job_array_cl_args.html
