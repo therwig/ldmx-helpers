@@ -3,3 +3,7 @@ job_submissions
 outputs
 *~
 #*
+*root
+*log
+__pycache__
+*dump
