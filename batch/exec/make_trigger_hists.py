@@ -35,25 +35,28 @@ def bookTH2(h, name, title, n, a, b, nn, aa, bb):
 # ecalLayers=[5,10,15,20,25,30] # for sums ?
 nEcalLayers=35
 nHcalLayers=50
+nHcalLayersSide=15
 bookTH1(hh,'nEvents','',1,0,1)
-bookTH1(hh,'Ecal_sumE',';total E [MeV]',60,0,6000)
-bookTH1(hh,'Ecal_sumE_outer',';total E [MeV]',100,0,1000)
-bookTH2(hh,'Ecal_layerSum',';layer number;total E [MeV]', nEcalLayers,-0.5,nEcalLayers-0.5, 50,0,2000,)
-bookTH2(hh,'Ecal_minLayerSum',';layer number;total E [MeV]', nEcalLayers,-0.5,nEcalLayers-0.5, 50,0,6000,)
+bookTH1(hh,'Ecal_sumE',';total E [MeV]',200,0,8000)
+bookTH1(hh,'Ecal_sumE_outer',';total E [MeV]',200,0,4000)
+bookTH2(hh,'Ecal_layerSum',';layer number;total E [MeV]', nEcalLayers,-0.5,nEcalLayers-0.5, 400,0,4000,)
+bookTH2(hh,'Ecal_minLayerSum',';layer number;total E [MeV]', nEcalLayers,-0.5,nEcalLayers-0.5, 400,0,8000,)
 
 bookTH1(hh,'Hcal_sumBackE',';total back HCal ADC [counts]',100,0,500)
-bookTH1(hh,'Hcal_sumSideE',';total side HCal ADC [counts]',100,0,500)
-bookTH1(hh,'Hcal_sumE',';total HCal ADC [counts]',100,0,500)
 bookTH1(hh,'Hcal_sumBackE2',';total back HCal ADC [counts]',100,0,50000)
+bookTH1(hh,'Hcal_sumSideE',';total side HCal ADC [counts]',100,0,500)
 bookTH1(hh,'Hcal_sumSideE2',';total side HCal ADC [counts]',100,0,50000)
+bookTH1(hh,'Hcal_sumE',';total HCal ADC [counts]',100,0,500)
 bookTH1(hh,'Hcal_sumE2',';total HCal ADC [counts]',100,0,50000)
-bookTH2(hh,'Hcal_backLayerSum',';layer number;total ACD [counts]', nHcalLayers,-0.5,nHcalLayers-0.5, 50,0,5000,)
-bookTH2(hh,'Hcal_minBackLayerSum',';layer number;total ACD [counts]', nHcalLayers,-0.5,nHcalLayers-0.5, 50,0,5000,)
-bookTH2(hh,'Hcal_sideLayerSum',';layer number;total ACD [counts]', nHcalLayers,-0.5,nHcalLayers-0.5, 50,0,5000,)
-bookTH2(hh,'Hcal_minSideLayerSum',';layer number;total ACD [counts]', nHcalLayers,-0.5,nHcalLayers-0.5, 50,0,5000,)
+bookTH2(hh,'Hcal_backLayerSum',';layer number;total ACD [counts]', nHcalLayers,-0.5,nHcalLayers-0.5, 200,0,10e3,)
+bookTH2(hh,'Hcal_minBackLayerSum',';layer number;total ACD [counts]', nHcalLayers,-0.5,nHcalLayers-0.5, 200,0,20e3,)
+bookTH2(hh,'Hcal_sideLayerSum',';layer number;total ACD [counts]', nHcalLayersSide,-0.5,nHcalLayersSide-0.5, 200,0,5000,)
+bookTH2(hh,'Hcal_minSideLayerSum',';layer number;total ACD [counts]', nHcalLayersSide,-0.5,nHcalLayersSide-0.5, 200,0,10e3,)
 # enum HcalSection { BACK = 0, TOP = 1, BOTTOM = 2, LEFT = 4, RIGHT = 3 };
 
-bookTH1(hh,'Clus_e',';ECal cluster E [MeV]',60,0,6000)
+bookTH1(hh,'Clus_e',';ECal cluster E [MeV]',200,0,8000)
+bookTH1(hh,'Clus_nTP',';ECal cluster TP multiplicity',50,-0.5,49.5)
+bookTH1(hh,'Clus_length',';ECal cluster length [#layers]',40,-0.5,39.5)
 bookTH2(hh,'TS_xy',';x[mm];y[mm]', 40,-20,20,40,-50,50)
 
 bookTH1(hh,'Ele_dx',';Trigger electron dx [mm]',40,-50,50)
@@ -106,17 +109,18 @@ for tree in trees:
     
         # hcal sums
         hcal_back_layers = nHcalLayers*[0.]
-        hcal_side_layers = nHcalLayers*[0.]
+        hcal_side_layers = nHcalLayersSide*[0.]
         # layer sums
         for s in event.hcalTrigQuadsBackLayerSums:
             hcal_back_layers[s.layer()] += s.hwEnergy()
         for s in event.hcalTrigQuadsSideLayerSums:
+            if s.layer() >= nHcalLayersSide: continue
             hcal_side_layers[s.layer()] += s.hwEnergy()
         for i in range(nHcalLayers):
             hh['Hcal_backLayerSum'].Fill(i, hcal_back_layers[i])
-            hh['Hcal_sideLayerSum'].Fill(i, hcal_side_layers[i])
-        for i in range(nHcalLayers):
             hh['Hcal_minBackLayerSum'].Fill(i, sum(hcal_back_layers[i:]))
+        for i in range(nHcalLayersSide):
+            hh['Hcal_sideLayerSum'].Fill(i, hcal_side_layers[i])
             hh['Hcal_minSideLayerSum'].Fill(i, sum(hcal_side_layers[i:]))
         # totals
         hcal_back_sum=0

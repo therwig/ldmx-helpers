@@ -13,11 +13,13 @@ p.sequence=[]
 p.keep = [
     "drop Trigger.*",
     "drop Tagger.*",
-    "drop Target.*",
+    "drop TargetSim.*",
     "drop Hcal.*",
+    "drop Ecal.*",
     "drop Magnet.*",
     "drop Recoil.*",
     "drop Tracker.*",
+    "drop trigScint.*"
 ]
 
 def div_round_up(n,d): return (n+d-1)//d
