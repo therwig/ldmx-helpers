@@ -35,10 +35,11 @@ class ele():
     def __init__(self, ts, clus):
         self.ts=ts
         self.clus=clus
-        self.isNull=(clus.energy()<1e-6 or t.getTrackID()<1)
+        self.isNull = (clus.energy()<1e-6 or t.getTrackID()<1)
+        tsx, tsy = ts.getPosition()[0], ts.getPosition()[1]
+        self.isNull |= (abs(tsx)<1e-3 and abs(tsy)<1e-3)
         self.clear()
         if not self.isNull:
-            tsx, tsy = ts.getPosition()[0], ts.getPosition()[1]
             self.tsx=tsx
             self.tsy=tsy
             self.e = clus.e()
