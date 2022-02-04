@@ -14,11 +14,11 @@ from cppyy.gbl import ldmx
 # default and local options
 infiles = ['in.root']
 if len(sys.argv)>1: infiles = [sys.argv[1]]
-outfile='hist_'+infiles[0].split('/')[-1]+'.root'
+outfile='hist_'+infiles[0].split('/')[-1]
 #batch overrides
 env = os.environ
-if 'BATCH_OUTFILE' in env:
-    outfile = env['BATCH_OUTFILE']
+if 'LSB_JOBINDEX' in env:
+    outfile = 'out.root' # will be renamed later
     infiles = glob.glob('input_files/*.root')
     
 trees = [EventTree.EventTree(f) for f in infiles]
@@ -234,7 +234,7 @@ def MakeRateVsCut(h, reverse=False):
         else:
             val = h.IntegralAndError(i,n+1,e)
         h2.SetBinContent(i,val)
-        h2.SetBinError(i,e)
+        h2.SetBinError(i,e.value)
             
     return h2
 

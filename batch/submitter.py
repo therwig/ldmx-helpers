@@ -74,7 +74,8 @@ def setupJob(args):
         #f.write("export BATCH_NFILES={}\n".format(nFilesPerJob)) #not needed
         f.write("export BATCH_NJOBS={}\n".format(nJobs))
         f.write("export BATCH_SEEDOFFSET={}\n".format(seedOffset))
-        f.write("fire cfg.py\n")
+        if args.pyExec: f.write("python3 cfg.py\n")
+        else: f.write("fire cfg.py\n")
         f.write("echo ls -lh; ls -lh\n")
 
     # write a logging wrapper
@@ -89,6 +90,8 @@ def setupJob(args):
         f.write('subDir="{}"\n'.format(subDir))
         f.write('cp $subDir/setup_ldmx.sh .\n')
         f.write('cp $subDir/run_wrapper.sh .\n')
+        for fi in args.include: f.write('cp $subDir/'+os.path.basename(fi)+' .\n')
+            # shutil.copy(wd+"/"+f, subDir+"/")
         # f.write('let "LSB_JOBINDEX_ZERO_IDX = LSB_JOBINDEX-1"\n')
         #f.write('if [ -f $subDir/filelist.py ]; then cp $subDir/filelist.py .; fi\n')
         #f.write('if [ -f $subDir/filelists/filelist.${LSB_JOBINDEX_ZERO_IDX}.py ]; then cp $subDir/filelists/filelist.${LSB_JOBINDEX_ZERO_IDX}.py filelist.py; fi\n')
@@ -115,7 +118,8 @@ def setupJob(args):
     # populate the submission directory
     shutil.copy(wd+"/scripts/setup_ldmx.sh", subDir)
     shutil.copy(wd+"/"+args.fragment, subDir+"/cfg.py")
-
+    for f in args.include: 
+        shutil.copy(wd+"/"+f, subDir+"/")
 
     queue = args.queue
     walltime = args.walltime
@@ -145,6 +149,8 @@ if __name__== "__main__":
     parser.add_argument("--nJobs", type=int, default=0, help="number of jobs to send")
     parser.add_argument("--seedOffset", type=int, default=0, help="offset to be applied to each of the job random seeds")
     parser.add_argument("--test", action='store_true', default=False, help="run 3x100 event test jobs")
+    parser.add_argument("--pyExec", action='store_true', default=False, help="instead of 'fire cfg.py' run 'python cfg.py'")
+    parser.add_argument("--include", nargs='*', default='', help="extra files to copy to the run directory")
     parser.add_argument("--queue", type=str, default='medium')
     parser.add_argument("--walltime", type=str, default='2800')
     parser.add_argument("--noSubmit", action='store_true')
