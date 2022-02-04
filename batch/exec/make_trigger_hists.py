@@ -31,6 +31,34 @@ def bookTH1(h, name, title, n, a, b):
 def bookTH2(h, name, title, n, a, b, nn, aa, bb):
     h[name] = ROOT.TH2F(name, title, n, a, b, nn, aa, bb)
     
+class ele():
+    def __init__(self, ts, clus):
+        self.ts=ts
+        self.clus=clus
+        self.isNull=(clus.energy()<1e-6 or t.getTrackID()<1)
+        self.clear()
+        if not self.isNull:
+            tsx, tsy = ts.getPosition()[0], ts.getPosition()[1]
+            self.tsx=tsx
+            self.tsy=tsy
+            self.e = clus.e()
+            self.dx = clus.x() - tsx
+            # expected dx [mm], when initial px=0
+            self.dx_hat = -( 2*(4000./clus.e()-1)+2.3 ) if clus.e() else 0 
+            self.dy = clus.y() - tsy
+            self.px = 17.8 * clus.e() / 4e3 * (self.dx - self.dx_hat)
+            self.py = 17.8 * clus.e() / 4e3 * self.dy
+            self.pt = hypot(self.px,self.py)
+    def clear(self):
+        self.e  = 0
+        self.dx = 0
+        self.dx_hat = 0
+        self.dy = 0
+        self.px = 0
+        self.py = 0
+        self.pt = 0
+        self.tsx = 0
+        self.tsy = 0
 
 # ecalLayers=[5,10,15,20,25,30] # for sums ?
 nEcalLayers=35
@@ -69,6 +97,28 @@ bookTH1(hh,'Ele_px',';Trigger electron p_{x} [MeV]',40,-600,600)
 bookTH1(hh,'Ele_py',';Trigger electron p_{y} [MeV]',40,-600,600)
 bookTH1(hh,'Ele_pyAbs',';Trigger electron |p_{y}| [MeV]',40,0,600)
 bookTH1(hh,'Ele_pt',';Trigger electron p_{T} [MeV]',40,0,800)
+#E-capped
+bookTH1(hh,'Ele_pyAbsCap',';Trigger electron |p_{y}| [MeV]',40,0,600)
+bookTH1(hh,'Ele_ptCap',';Trigger electron p_{T} [MeV]',40,0,800)
+
+#correlations for ele debugging
+bookTH2(hh,'Ele_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,800,60,0,6e3)
+bookTH2(hh,'Ele_pt_vs_TSx',';Trigger electron p_{T} [MeV];TS x [mm]',40,0,800,40,-20,20)
+bookTH2(hh,'Ele_pt_vs_TSy',';Trigger electron p_{T} [MeV];TS y [mm]',40,0,800,40,-50,50)
+bookTH2(hh,'Ele_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,-0.5,99.5)
+bookTH2(hh,'Ele_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
+bookTH2(hh,'EleCap_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,800,60,0,6e3)
+bookTH2(hh,'EleCap_pt_vs_TSx',';Trigger electron p_{T} [MeV];TS x [mm]',40,0,800,40,-20,20)
+bookTH2(hh,'EleCap_pt_vs_TSy',';Trigger electron p_{T} [MeV];TS y [mm]',40,0,800,40,-50,50)
+bookTH2(hh,'EleCap_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,-0.5,99.5)
+bookTH2(hh,'EleCap_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
+bookTH2(hh,'Ele300_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,800,60,0,6e3)
+bookTH2(hh,'Ele300_pt_vs_TSx',';Trigger electron p_{T} [MeV];TS x [mm]',40,0,800,40,-20,20)
+bookTH2(hh,'Ele300_pt_vs_TSy',';Trigger electron p_{T} [MeV];TS y [mm]',40,0,800,40,-50,50)
+bookTH2(hh,'Ele300_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,-0.5,99.5)
+bookTH2(hh,'Ele300_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
+bookTH2(hh,'Ele300_TSx_vs_TSy',';TS x [mm];TS y [mm]',40,-20,20,40,-50,50)
+
 
 # large and small ranges
 bookTH1(hh,'Truth_px',';Truth particle p_{x} [MeV]',40,-100,100)
@@ -165,23 +215,54 @@ for tree in trees:
             # hh['Truth_px'].Fill(p[0])
             # hh['Truth_py'].Fill(p[1])
             # hh['Truth_pt'].Fill(hypot(p[0],p[1]))
-        hh['TS_xy'].Fill(ts.getPosition()[0], ts.getPosition()[1])
-    
-        # electron
-        dx = clus.x() - ts.getPosition()[0]
-        dx_hat = -( 2*(4000./clus.e()-1)+2.3 ) if clus.e() else 0 # expected dx [mm], when initial px=0
-        dy = clus.y() - ts.getPosition()[1]
-        px = 17.8 * clus.e() / 4e3 * (dx - dx_hat)
-        py = 17.8 * clus.e() / 4e3 * dy
-        pt = hypot(px,py)
+        tsx, tsy = ts.getPosition()[0], ts.getPosition()[1]
+        hh['TS_xy'].Fill(tsx, tsy)
         
-        hh['Ele_dx'].Fill(dx - dx_hat)
-        hh['Ele_dx_raw'].Fill(dx)
-        hh['Ele_dy'].Fill(dy)
-        hh['Ele_px'].Fill(px)
-        hh['Ele_py'].Fill(py)
-        hh['Ele_pyAbs'].Fill(abs(py))
-        hh['Ele_pt'].Fill(pt)
+        # electron
+        e = ele(ts, clus)
+        if abs(e.tsx)>8: e.clear()
+        if abs(e.tsy)>35: e.clear()
+
+        
+        hh['Ele_dx'].Fill(e.dx - e.dx_hat)
+        hh['Ele_dx2'].Fill(e.dx - e.dx_hat)
+        hh['Ele_dx_raw'].Fill(e.dx)
+        hh['Ele_dx_raw2'].Fill(e.dx)
+        hh['Ele_dy'].Fill(e.dy)
+        hh['Ele_dy2'].Fill(e.dy)
+        hh['Ele_px'].Fill(e.px)
+        hh['Ele_py'].Fill(e.py)
+        hh['Ele_pyAbs'].Fill(abs(e.py))
+        hh['Ele_pt'].Fill(e.pt)
+
+        hh['Ele_pt_vs_e'].Fill(e.pt, e.clus.e())
+        hh['Ele_pt_vs_TSx'].Fill(e.pt, e.tsx) 
+        hh['Ele_pt_vs_TSy'].Fill(e.pt, e.tsy) 
+        hh['Ele_pt_vs_nTP'].Fill(e.pt, e.clus.nTP())
+        hh['Ele_pt_vs_depth'].Fill(e.pt, e.clus.depth())
+
+        if e.pt>300:
+            hh['Ele300_pt_vs_e'].Fill(e.pt, e.clus.e())
+            hh['Ele300_pt_vs_TSx'].Fill(e.pt, e.tsx) 
+            hh['Ele300_pt_vs_TSy'].Fill(e.pt, e.tsy) 
+            hh['Ele300_pt_vs_nTP'].Fill(e.pt, e.clus.nTP())
+            hh['Ele300_pt_vs_depth'].Fill(e.pt, e.clus.depth())
+            hh['Ele300_TSx_vs_TSy'].Fill(e.tsx, e.tsy)
+        
+        # energy-capped quantities
+        e2=e
+        if e.e>4e3:
+            e.clus.setEnergy(4e3)
+            e2 = ele(e.ts, e.clus)
+            
+        hh['Ele_pyAbsCap'].Fill(abs(e2.py))
+        hh['Ele_ptCap'].Fill(e2.pt)
+        
+        hh['EleCap_pt_vs_e'].Fill(e2.pt, e2.clus.e())
+        hh['EleCap_pt_vs_TSx'].Fill(e2.pt, e2.tsx) 
+        hh['EleCap_pt_vs_TSy'].Fill(e2.pt, e2.tsy) 
+        hh['EleCap_pt_vs_nTP'].Fill(e2.pt, e2.clus.nTP())
+        hh['EleCap_pt_vs_depth'].Fill(e2.pt, e2.clus.depth())
     
         # truth, for the leading track
         truth_e = truth.getEnergy()
@@ -200,8 +281,8 @@ for tree in trees:
         hh['Truth_e'].Fill(truth_e)
     
         # Ele trigger
-        if pt>400: hh['Truth_pt_Ele400'].Fill(truth_pt)
-        if pt>500: hh['Truth_pt_Ele500'].Fill(truth_pt)
+        if e.pt>400: hh['Truth_pt_Ele400'].Fill(truth_pt)
+        if e.pt>500: hh['Truth_pt_Ele500'].Fill(truth_pt)
     
         # Neutron trigger
         if hcal_back_sum>100: hh['Truth_e_BackHcal100'].Fill(truth_e)
@@ -230,39 +311,40 @@ for tree in trees:
 #
 for h in hh:
     remove_overflow(hh[h])
-    
-def MakeRateVsCut(h, reverse=False):
-    h2 = h.Clone("rate_"+h.GetName())
-    n = h2.GetNbinsX()
-    for i in range(1,n+1):
-        # h2.SetBinContent( h.Integral(i,n) )
-        # events from bin ib to max         
-        # e=ROOT.double(0)
-        e=ctypes.c_double(0)
-        if reverse:
-            val = h.IntegralAndError(0,i,e)
-        else:
-            val = h.IntegralAndError(i,n+1,e)
-        h2.SetBinContent(i,val)
-        h2.SetBinError(i,e.value)
-            
-    return h2
 
-hh['rate_Ecal_sumE'] = MakeRateVsCut(hh['Ecal_sumE'], reverse=True)
-hh['rate_Ecal_sumE_outer'] = MakeRateVsCut(hh['Ecal_sumE_outer'])
-hh['rate_Hcal_sumE'] = MakeRateVsCut(hh['Hcal_sumE'])
-
-ecal_layer_energies = [1000,1500,2000,2500,3000,3500,4000]
-for e in ecal_layer_energies:
-    h = hh['Ecal_minLayerSum']
-    b = h.GetYaxis().FindBin(e)
-    hh['Ecal_layerAbove{}MeV'.format(e)] = h.ProjectionX('Ecal_layerAbove{}MeV'.format(e),b,-1)
-    
-hcal_layer_adcs = [5,10,20,50,100]
-for e in hcal_layer_adcs:
-    h = hh['Hcal_minBackLayerSum']
-    b = h.GetYaxis().FindBin(e)
-    hh['Hcal_backLayerAbove{}adc'.format(e)] = h.ProjectionX('Hcal_backLayerAbove{}adc'.format(e),b,-1)
+if False:
+  def MakeRateVsCut(h, reverse=False):
+      h2 = h.Clone("rate_"+h.GetName())
+      n = h2.GetNbinsX()
+      for i in range(1,n+1):
+          # h2.SetBinContent( h.Integral(i,n) )
+          # events from bin ib to max         
+          # e=ROOT.double(0)
+          e=ctypes.c_double(0)
+          if reverse:
+              val = h.IntegralAndError(0,i,e)
+          else:
+              val = h.IntegralAndError(i,n+1,e)
+          h2.SetBinContent(i,val)
+          h2.SetBinError(i,e.value)
+              
+      return h2
+  
+  hh['rate_Ecal_sumE'] = MakeRateVsCut(hh['Ecal_sumE'], reverse=True)
+  hh['rate_Ecal_sumE_outer'] = MakeRateVsCut(hh['Ecal_sumE_outer'])
+  hh['rate_Hcal_sumE'] = MakeRateVsCut(hh['Hcal_sumE'])
+  
+  ecal_layer_energies = [1000,1500,2000,2500,3000,3500,4000]
+  for e in ecal_layer_energies:
+      h = hh['Ecal_minLayerSum']
+      b = h.GetYaxis().FindBin(e)
+      hh['Ecal_layerAbove{}MeV'.format(e)] = h.ProjectionX('Ecal_layerAbove{}MeV'.format(e),b,-1)
+      
+  hcal_layer_adcs = [5,10,20,50,100]
+  for e in hcal_layer_adcs:
+      h = hh['Hcal_minBackLayerSum']
+      b = h.GetYaxis().FindBin(e)
+      hh['Hcal_backLayerAbove{}adc'.format(e)] = h.ProjectionX('Hcal_backLayerAbove{}adc'.format(e),b,-1)
     
 #f_output.Write()
 for h in hh:
