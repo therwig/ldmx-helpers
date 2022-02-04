@@ -55,13 +55,16 @@ bookTH2(hh,'Hcal_minSideLayerSum',';layer number;total ACD [counts]', nHcalLayer
 # enum HcalSection { BACK = 0, TOP = 1, BOTTOM = 2, LEFT = 4, RIGHT = 3 };
 
 bookTH1(hh,'Clus_e',';ECal cluster E [MeV]',200,0,8000)
-bookTH1(hh,'Clus_nTP',';ECal cluster TP multiplicity',50,-0.5,49.5)
+bookTH1(hh,'Clus_nTP',';ECal cluster TP multiplicity',100,-0.5,99.5)
 bookTH1(hh,'Clus_length',';ECal cluster length [#layers]',40,-0.5,39.5)
 bookTH2(hh,'TS_xy',';x[mm];y[mm]', 40,-20,20,40,-50,50)
 
 bookTH1(hh,'Ele_dx',';Trigger electron dx [mm]',40,-50,50)
+bookTH1(hh,'Ele_dx2',';Trigger electron dx [mm]',40,-200,200)
 bookTH1(hh,'Ele_dx_raw',';Trigger electron dx (no corr.) [mm]',40,-50,50)
+bookTH1(hh,'Ele_dx_raw2',';Trigger electron dx (no corr.) [mm]',40,-200,200)
 bookTH1(hh,'Ele_dy',';Trigger electron dy [mm]',40,-50,50)
+bookTH1(hh,'Ele_dy2',';Trigger electron dy [mm]',40,-200,200)
 bookTH1(hh,'Ele_px',';Trigger electron p_{x} [MeV]',40,-600,600)
 bookTH1(hh,'Ele_py',';Trigger electron p_{y} [MeV]',40,-600,600)
 bookTH1(hh,'Ele_pyAbs',';Trigger electron |p_{y}| [MeV]',40,0,600)
@@ -144,6 +147,8 @@ for tree in trees:
             # if c.depth()<10: continue
             if c.e() > clus.e(): clus = c
         hh['Clus_e'].Fill(clus.e())
+        hh['Clus_nTP'].Fill(clus.nTP())
+        hh['Clus_length'].Fill(clus.depth())
     
         # TS hit
         ts=ldmx.SimTrackerHit()
@@ -153,8 +158,9 @@ for tree in trees:
             z=t.getPosition()[2]
             if z<0 or z>1: continue
             truth=t
-            # if t.getPdgID()!=11: continue
-            # ts=t
+            # print("Truth",z,)
+            if t.getPdgID()!=11: continue
+            ts=t
             # p=ts.getMomentum()
             # hh['Truth_px'].Fill(p[0])
             # hh['Truth_py'].Fill(p[1])
