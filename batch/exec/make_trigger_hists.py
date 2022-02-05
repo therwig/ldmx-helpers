@@ -98,6 +98,16 @@ bookTH1(hh,'Ele_px',';Trigger electron p_{x} [MeV]',40,-600,600)
 bookTH1(hh,'Ele_py',';Trigger electron p_{y} [MeV]',40,-600,600)
 bookTH1(hh,'Ele_pyAbs',';Trigger electron |p_{y}| [MeV]',40,0,600)
 bookTH1(hh,'Ele_pt',';Trigger electron p_{T} [MeV]',40,0,800)
+
+bookTH1(hh,'nEle',';Trigger electron multiplicity',10,-0.5,9.5)
+bookTH1(hh,'Ele2_pt',';Trigger electron p_{T} [MeV]',40,0,400)
+bookTH1(hh,'Ele3_pt',';Trigger electron p_{T} [MeV]',40,0,400)
+bookTH1(hh,'Ele4_pt',';Trigger electron p_{T} [MeV]',40,0,400)
+bookTH1(hh,'Ele_e',';Trigger electron E [MeV]',200,0,8000)
+bookTH1(hh,'Ele2_e',';Trigger electron E [MeV]',200,0,4000)
+bookTH1(hh,'Ele3_e',';Trigger electron E [MeV]',200,0,4000)
+bookTH1(hh,'Ele4_e',';Trigger electron E [MeV]',200,0,4000)
+
 #E-capped
 bookTH1(hh,'Ele_pyAbsCap',';Trigger electron |p_{y}| [MeV]',40,0,600)
 bookTH1(hh,'Ele_ptCap',';Trigger electron p_{T} [MeV]',40,0,800)
@@ -111,19 +121,19 @@ bookTH2(hh,'Ele_pt_vs_TSx',';Trigger electron p_{T} [MeV];TS x [mm]',40,0,800,40
 bookTH2(hh,'Ele_pt_vs_TSy',';Trigger electron p_{T} [MeV];TS y [mm]',40,0,800,40,-50,50)
 bookTH2(hh,'Ele_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,-0.5,99.5)
 bookTH2(hh,'Ele_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
-bookTH2(hh,'Ele_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,100)
+bookTH2(hh,'Ele_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,200)
 bookTH2(hh,'EleCap_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,800,60,0,6e3)
 bookTH2(hh,'EleCap_pt_vs_TSx',';Trigger electron p_{T} [MeV];TS x [mm]',40,0,800,40,-20,20)
 bookTH2(hh,'EleCap_pt_vs_TSy',';Trigger electron p_{T} [MeV];TS y [mm]',40,0,800,40,-50,50)
 bookTH2(hh,'EleCap_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,-0.5,99.5)
 bookTH2(hh,'EleCap_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
-bookTH2(hh,'EleCap_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,100)
+bookTH2(hh,'EleCap_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,200)
 bookTH2(hh,'Ele300_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,800,60,0,6e3)
 bookTH2(hh,'Ele300_pt_vs_TSx',';Trigger electron p_{T} [MeV];TS x [mm]',40,0,800,40,-20,20)
 bookTH2(hh,'Ele300_pt_vs_TSy',';Trigger electron p_{T} [MeV];TS y [mm]',40,0,800,40,-50,50)
 bookTH2(hh,'Ele300_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,-0.5,99.5)
 bookTH2(hh,'Ele300_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
-bookTH2(hh,'Ele300_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,100)
+bookTH2(hh,'Ele300_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,200)
 bookTH2(hh,'Ele300_TSx_vs_TSy',';TS x [mm];TS y [mm]',40,-20,20,40,-50,50)
 bookTH2(hh,'Ele300_Clusx_vs_Clusy',';Clus x [mm];Clus y [mm]',60,-150,150,60,-150,150)
 bookTH2(hh,'Ele300_Clusx_vs_Clusy2',';Clus x [mm];Clus y [mm]',300,-150,150,300,-150,150)
@@ -227,7 +237,7 @@ for tree in trees:
         tsx, tsy = ts.getPosition()[0], ts.getPosition()[1]
         hh['TS_xy'].Fill(tsx, tsy)
         
-        # electron
+        # leading electron
         e = ele(ts, clus)
         if abs(e.tsx)>8: e.clear()
         if abs(e.tsy)>35: e.clear()
@@ -243,6 +253,7 @@ for tree in trees:
         hh['Ele_py'].Fill(e.py)
         hh['Ele_pyAbs'].Fill(abs(e.py))
         hh['Ele_pt'].Fill(e.pt)
+        hh['Ele_e'].Fill(e.e)
 
         hh['Ele_pt_vs_e'].Fill(e.pt, e.clus.e())
         hh['Ele_pt_vs_TSx'].Fill(e.pt, e.tsx) 
@@ -263,6 +274,19 @@ for tree in trees:
             hh['Ele300_Clusx_vs_Clusy2'].Fill(e.clus.x(), e.clus.y())
         passTight=(e.clus.nTP()>=20 and e.clus.depth()>=10)
         hh['Ele_ptTight'].Fill(e.pt if passTight else 0)
+
+        # all clusters
+        eles = [ele(ts, clus) for clus in event.ecalTrigClusters]
+        eles = list(filter(lambda e: abs(e.tsx)<8 and abs(e.tsy)<35, eles))
+        hh['nEle'].Fill(len(eles))
+        eles_pt = sorted(eles, key=lambda el:el.pt, reverse=True)
+        for i in range(1,4):
+            hh['Ele'+str(i+1)+'_pt'].Fill(eles_pt[i].pt if len(eles_pt)>i else 0)
+        eles_e = sorted(eles, key=lambda el:el.e, reverse=True)
+        for i in range(1,4):
+            hh['Ele'+str(i+1)+'_e'].Fill(eles_e[i].e if len(eles_e)>i else 0)
+            # print('post',[el.pt for el in eles])
+        
         
         # energy-capped quantities
         e2=e
