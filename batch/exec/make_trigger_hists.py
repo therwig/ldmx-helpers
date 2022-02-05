@@ -125,6 +125,8 @@ bookTH2(hh,'Ele300_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,
 bookTH2(hh,'Ele300_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
 bookTH2(hh,'Ele300_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,100)
 bookTH2(hh,'Ele300_TSx_vs_TSy',';TS x [mm];TS y [mm]',40,-20,20,40,-50,50)
+bookTH2(hh,'Ele300_Clusx_vs_Clusy',';Clus x [mm];Clus y [mm]',60,-150,150,60,-150,150)
+bookTH2(hh,'Ele300_Clusx_vs_Clusy2',';Clus x [mm];Clus y [mm]',300,-150,150,300,-150,150)
 
 
 # large and small ranges
@@ -257,6 +259,8 @@ for tree in trees:
             hh['Ele300_pt_vs_depth'].Fill(e.pt, e.clus.depth())
             hh['Ele300_pt_vs_ze'].Fill(e.pt, e.clus.ze())
             hh['Ele300_TSx_vs_TSy'].Fill(e.tsx, e.tsy)
+            hh['Ele300_Clusx_vs_Clusy'].Fill(e.clus.x(), e.clus.y())
+            hh['Ele300_Clusx_vs_Clusy2'].Fill(e.clus.x(), e.clus.y())
         passTight=(e.clus.nTP()>=20 and e.clus.depth()>=10)
         hh['Ele_ptTight'].Fill(e.pt if passTight else 0)
         
