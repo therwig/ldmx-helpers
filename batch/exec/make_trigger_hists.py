@@ -101,6 +101,9 @@ bookTH1(hh,'Ele_pt',';Trigger electron p_{T} [MeV]',40,0,800)
 #E-capped
 bookTH1(hh,'Ele_pyAbsCap',';Trigger electron |p_{y}| [MeV]',40,0,600)
 bookTH1(hh,'Ele_ptCap',';Trigger electron p_{T} [MeV]',40,0,800)
+#
+bookTH1(hh,'Ele_ptTight',';Trigger electron p_{T} [MeV]',40,0,800)
+bookTH1(hh,'Ele_ptTightCap',';Trigger electron p_{T} [MeV]',40,0,800)
 
 #correlations for ele debugging
 bookTH2(hh,'Ele_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,800,60,0,6e3)
@@ -108,16 +111,19 @@ bookTH2(hh,'Ele_pt_vs_TSx',';Trigger electron p_{T} [MeV];TS x [mm]',40,0,800,40
 bookTH2(hh,'Ele_pt_vs_TSy',';Trigger electron p_{T} [MeV];TS y [mm]',40,0,800,40,-50,50)
 bookTH2(hh,'Ele_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,-0.5,99.5)
 bookTH2(hh,'Ele_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
+bookTH2(hh,'Ele_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,100)
 bookTH2(hh,'EleCap_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,800,60,0,6e3)
 bookTH2(hh,'EleCap_pt_vs_TSx',';Trigger electron p_{T} [MeV];TS x [mm]',40,0,800,40,-20,20)
 bookTH2(hh,'EleCap_pt_vs_TSy',';Trigger electron p_{T} [MeV];TS y [mm]',40,0,800,40,-50,50)
 bookTH2(hh,'EleCap_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,-0.5,99.5)
 bookTH2(hh,'EleCap_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
+bookTH2(hh,'EleCap_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,100)
 bookTH2(hh,'Ele300_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,800,60,0,6e3)
 bookTH2(hh,'Ele300_pt_vs_TSx',';Trigger electron p_{T} [MeV];TS x [mm]',40,0,800,40,-20,20)
 bookTH2(hh,'Ele300_pt_vs_TSy',';Trigger electron p_{T} [MeV];TS y [mm]',40,0,800,40,-50,50)
 bookTH2(hh,'Ele300_pt_vs_nTP',';Trigger electron p_{T} [MeV];nTP ',40,0,800,100,-0.5,99.5)
 bookTH2(hh,'Ele300_pt_vs_depth',';Trigger electron p_{T} [MeV];depth ',40,0,800,35,-0.5,34.5)
+bookTH2(hh,'Ele300_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,100,0,100)
 bookTH2(hh,'Ele300_TSx_vs_TSy',';TS x [mm];TS y [mm]',40,-20,20,40,-50,50)
 
 
@@ -241,6 +247,7 @@ for tree in trees:
         hh['Ele_pt_vs_TSy'].Fill(e.pt, e.tsy) 
         hh['Ele_pt_vs_nTP'].Fill(e.pt, e.clus.nTP())
         hh['Ele_pt_vs_depth'].Fill(e.pt, e.clus.depth())
+        hh['Ele_pt_vs_ze'].Fill(e.pt, e.clus.ze())
 
         if e.pt>300:
             hh['Ele300_pt_vs_e'].Fill(e.pt, e.clus.e())
@@ -248,7 +255,10 @@ for tree in trees:
             hh['Ele300_pt_vs_TSy'].Fill(e.pt, e.tsy) 
             hh['Ele300_pt_vs_nTP'].Fill(e.pt, e.clus.nTP())
             hh['Ele300_pt_vs_depth'].Fill(e.pt, e.clus.depth())
+            hh['Ele300_pt_vs_ze'].Fill(e.pt, e.clus.ze())
             hh['Ele300_TSx_vs_TSy'].Fill(e.tsx, e.tsy)
+        passTight=(e.clus.nTP()>=20 and e.clus.depth()>=10)
+        hh['Ele_ptTight'].Fill(e.pt if passTight else 0)
         
         # energy-capped quantities
         e2=e
@@ -258,13 +268,15 @@ for tree in trees:
             
         hh['Ele_pyAbsCap'].Fill(abs(e2.py))
         hh['Ele_ptCap'].Fill(e2.pt)
+        hh['Ele_ptTightCap'].Fill(e.pt if passTight else 0)
         
         hh['EleCap_pt_vs_e'].Fill(e2.pt, e2.clus.e())
         hh['EleCap_pt_vs_TSx'].Fill(e2.pt, e2.tsx) 
         hh['EleCap_pt_vs_TSy'].Fill(e2.pt, e2.tsy) 
         hh['EleCap_pt_vs_nTP'].Fill(e2.pt, e2.clus.nTP())
         hh['EleCap_pt_vs_depth'].Fill(e2.pt, e2.clus.depth())
-    
+        hh['EleCap_pt_vs_ze'].Fill(e2.pt, e2.clus.ze())
+
         # truth, for the leading track
         truth_e = truth.getEnergy()
         truth_p = truth.getMomentum()
