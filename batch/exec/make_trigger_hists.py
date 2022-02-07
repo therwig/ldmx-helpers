@@ -70,6 +70,7 @@ bookTH1(hh,'Ecal_sumE',';total E [MeV]',200,0,8000)
 bookTH1(hh,'Ecal_sumE_outer',';total E [MeV]',200,0,4000)
 bookTH2(hh,'Ecal_layerSum',';layer number;total E [MeV]', nEcalLayers,-0.5,nEcalLayers-0.5, 400,0,4000,)
 bookTH2(hh,'Ecal_minLayerSum',';layer number;total E [MeV]', nEcalLayers,-0.5,nEcalLayers-0.5, 400,0,8000,)
+bookTH2(hh,'Ecal_maxLayerSum',';layer number;total E [MeV]', nEcalLayers,-0.5,nEcalLayers-0.5, 400,0,8000,)
 
 bookTH1(hh,'Hcal_sumBackE',';total back HCal ADC [counts]',100,0,500)
 bookTH1(hh,'Hcal_sumBackE2',';total back HCal ADC [counts]',100,0,50000)
@@ -79,14 +80,18 @@ bookTH1(hh,'Hcal_sumE',';total HCal ADC [counts]',100,0,500)
 bookTH1(hh,'Hcal_sumE2',';total HCal ADC [counts]',100,0,50000)
 bookTH2(hh,'Hcal_backLayerSum',';layer number;total ACD [counts]', nHcalLayers,-0.5,nHcalLayers-0.5, 200,0,10e3,)
 bookTH2(hh,'Hcal_minBackLayerSum',';layer number;total ACD [counts]', nHcalLayers,-0.5,nHcalLayers-0.5, 200,0,20e3,)
+bookTH2(hh,'Hcal_maxBackLayerSum',';layer number;total ACD [counts]', nHcalLayers,-0.5,nHcalLayers-0.5, 200,0,20e3,)
 bookTH2(hh,'Hcal_sideLayerSum',';layer number;total ACD [counts]', nHcalLayersSide,-0.5,nHcalLayersSide-0.5, 200,0,5000,)
 bookTH2(hh,'Hcal_minSideLayerSum',';layer number;total ACD [counts]', nHcalLayersSide,-0.5,nHcalLayersSide-0.5, 200,0,10e3,)
+bookTH2(hh,'Hcal_maxSideLayerSum',';layer number;total ACD [counts]', nHcalLayersSide,-0.5,nHcalLayersSide-0.5, 200,0,10e3,)
 # enum HcalSection { BACK = 0, TOP = 1, BOTTOM = 2, LEFT = 4, RIGHT = 3 };
 
 bookTH1(hh,'Clus_e',';ECal cluster E [MeV]',200,0,8000)
 bookTH1(hh,'Clus_nTP',';ECal cluster TP multiplicity',100,-0.5,99.5)
 bookTH1(hh,'Clus_length',';ECal cluster length [#layers]',40,-0.5,39.5)
 bookTH2(hh,'TS_xy',';x[mm];y[mm]', 40,-20,20,40,-50,50)
+bookTH2(hh,'ECal_xy',';x[mm];y[mm]', 80,-100,100,80,-100,100)
+bookTH2(hh,'ECal_xy2',';x[mm];y[mm]', 200,-300,300,200,-300,300)
 
 bookTH1(hh,'Ele_dx',';Trigger electron dx [mm]',40,-50,50)
 bookTH1(hh,'Ele_dx2',';Trigger electron dx [mm]',40,-200,200)
@@ -98,12 +103,14 @@ bookTH1(hh,'Ele_px',';Trigger electron p_{x} [MeV]',40,-600,600)
 bookTH1(hh,'Ele_py',';Trigger electron p_{y} [MeV]',40,-600,600)
 bookTH1(hh,'Ele_pyAbs',';Trigger electron |p_{y}| [MeV]',40,0,600)
 bookTH1(hh,'Ele_pt',';Trigger electron p_{T} [MeV]',40,0,800)
+bookTH1(hh,'Ele_e',';Trigger electron E [MeV]',200,0,8000)
 
 bookTH1(hh,'nEle',';Trigger electron multiplicity',10,-0.5,9.5)
+bookTH1(hh,'Ele1_pt',';Trigger electron p_{T} [MeV]',40,0,800)
 bookTH1(hh,'Ele2_pt',';Trigger electron p_{T} [MeV]',40,0,400)
 bookTH1(hh,'Ele3_pt',';Trigger electron p_{T} [MeV]',40,0,400)
 bookTH1(hh,'Ele4_pt',';Trigger electron p_{T} [MeV]',40,0,400)
-bookTH1(hh,'Ele_e',';Trigger electron E [MeV]',200,0,8000)
+bookTH1(hh,'Ele1_e',';Trigger electron E [MeV]',200,0,8000)
 bookTH1(hh,'Ele2_e',';Trigger electron E [MeV]',200,0,4000)
 bookTH1(hh,'Ele3_e',';Trigger electron E [MeV]',200,0,4000)
 bookTH1(hh,'Ele4_e',';Trigger electron E [MeV]',200,0,4000)
@@ -137,6 +144,7 @@ bookTH2(hh,'Ele300_pt_vs_ze',';Trigger electron p_{T} [MeV];ze [mm] ',40,0,800,1
 bookTH2(hh,'Ele300_TSx_vs_TSy',';TS x [mm];TS y [mm]',40,-20,20,40,-50,50)
 bookTH2(hh,'Ele300_Clusx_vs_Clusy',';Clus x [mm];Clus y [mm]',60,-150,150,60,-150,150)
 bookTH2(hh,'Ele300_Clusx_vs_Clusy2',';Clus x [mm];Clus y [mm]',300,-150,150,300,-150,150)
+bookTH2(hh,'Ele300_ECal_xy',';x[mm];y[mm]', 200,-300,300,200,-300,300)
 
 
 # large and small ranges
@@ -149,10 +157,13 @@ bookTH1(hh,'Truth_pyAbs2',';Truth particle p_{T} [MeV]',40,0,1200)
 bookTH1(hh,'Truth_pt',';Truth particle p_{T} [MeV]',40,0,100)
 bookTH1(hh,'Truth_pt2',';Truth particle p_{T} [MeV]',40,0,1200)
 bookTH1(hh,'Truth_e',';Truth particle E [MeV]',40,0,4000)
+bookTH2(hh,'Truth_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,1200,40,0,4e3)
 
 # Ele trigger
 bookTH1(hh,'Truth_pt_Ele400',';Truth electron p_{T} [MeV]',40,0,1200)
 bookTH1(hh,'Truth_pt_Ele500',';Truth electron p_{T} [MeV]',40,0,1200)
+bookTH2(hh,'ECal_xy_pass400',';x[mm];y[mm]', 200,-300,300,200,-300,300)
+bookTH2(hh,'ECal_xy_fail400',';x[mm];y[mm]', 200,-300,300,200,-300,300)
 # HCal trigger
 bookTH1(hh,'Truth_e_BackHcal100',';Truth electron E [MeV]',40,0,4000)
 bookTH1(hh,'Truth_e_BackHcal1000',';Truth electron E [MeV]',40,0,4000)
@@ -176,6 +187,7 @@ for tree in trees:
             hh['Ecal_layerSum'].Fill(i, ecal_layers[i])        
         for i in range(nEcalLayers):
             hh['Ecal_minLayerSum'].Fill(i, sum(ecal_layers[i:]))
+            hh['Ecal_maxLayerSum'].Fill(i, sum(ecal_layers[:i]))
         hh['Ecal_sumE'].Fill(sum(ecal_layers))
         hh['Ecal_sumE_outer'].Fill(ecal_outer)
     
@@ -191,9 +203,11 @@ for tree in trees:
         for i in range(nHcalLayers):
             hh['Hcal_backLayerSum'].Fill(i, hcal_back_layers[i])
             hh['Hcal_minBackLayerSum'].Fill(i, sum(hcal_back_layers[i:]))
+            hh['Hcal_maxBackLayerSum'].Fill(i, sum(hcal_back_layers[:i]))
         for i in range(nHcalLayersSide):
             hh['Hcal_sideLayerSum'].Fill(i, hcal_side_layers[i])
             hh['Hcal_minSideLayerSum'].Fill(i, sum(hcal_side_layers[i:]))
+            hh['Hcal_maxSideLayerSum'].Fill(i, sum(hcal_side_layers[:i]))
         # totals
         hcal_back_sum=0
         hcal_side_sum=0
@@ -225,17 +239,25 @@ for tree in trees:
         for t in event.TargetScoringPlaneHits:
             if t.getTrackID()!=1: continue
             z=t.getPosition()[2]
-            if z<0 or z>1: continue
-            truth=t
-            # print("Truth",z,)
-            if t.getPdgID()!=11: continue
-            ts=t
-            # p=ts.getMomentum()
-            # hh['Truth_px'].Fill(p[0])
-            # hh['Truth_py'].Fill(p[1])
-            # hh['Truth_pt'].Fill(hypot(p[0],p[1]))
+            if z>0 and z<1: 
+                truth=t
+                if t.getPdgID()==11: ts=t
+                    
+        ecal=ldmx.SimTrackerHit()
+        #ecal.setEdep(0)
+        if hasattr(event,'EcalScoringPlaneHits'):
+            for t in event.EcalScoringPlaneHits:
+                if t.getTrackID()!=1: continue
+                z=t.getPosition()[2]
+                if z<240.4 or z>240.6: continue
+                if t.getEdep() > ecal.getEdep():
+                    ecal = t
+                
         tsx, tsy = ts.getPosition()[0], ts.getPosition()[1]
         hh['TS_xy'].Fill(tsx, tsy)
+        ecalx, ecaly = ecal.getPosition()[0], ecal.getPosition()[1]
+        hh['ECal_xy'].Fill(ecalx, ecaly)
+        hh['ECal_xy2'].Fill(ecalx, ecaly)
         
         # leading electron
         e = ele(ts, clus)
@@ -272,6 +294,8 @@ for tree in trees:
             hh['Ele300_TSx_vs_TSy'].Fill(e.tsx, e.tsy)
             hh['Ele300_Clusx_vs_Clusy'].Fill(e.clus.x(), e.clus.y())
             hh['Ele300_Clusx_vs_Clusy2'].Fill(e.clus.x(), e.clus.y())
+            hh['Ele300_ECal_xy'].Fill(ecalx, ecaly)
+            
         passTight=(e.clus.nTP()>=20 and e.clus.depth()>=10)
         hh['Ele_ptTight'].Fill(e.pt if passTight else 0)
 
@@ -280,10 +304,10 @@ for tree in trees:
         eles = list(filter(lambda e: abs(e.tsx)<8 and abs(e.tsy)<35, eles))
         hh['nEle'].Fill(len(eles))
         eles_pt = sorted(eles, key=lambda el:el.pt, reverse=True)
-        for i in range(1,4):
+        for i in range(4):
             hh['Ele'+str(i+1)+'_pt'].Fill(eles_pt[i].pt if len(eles_pt)>i else 0)
         eles_e = sorted(eles, key=lambda el:el.e, reverse=True)
-        for i in range(1,4):
+        for i in range(4):
             hh['Ele'+str(i+1)+'_e'].Fill(eles_e[i].e if len(eles_e)>i else 0)
             # print('post',[el.pt for el in eles])
         
@@ -320,11 +344,16 @@ for tree in trees:
         hh['Truth_px2'].Fill(truth_px)
         hh['Truth_pt2'].Fill(truth_pt)
         hh['Truth_e'].Fill(truth_e)
-    
+        hh['Truth_pt_vs_e'].Fill(truth_pt,truth_e)
+
         # Ele trigger
         if e.pt>400: hh['Truth_pt_Ele400'].Fill(truth_pt)
         if e.pt>500: hh['Truth_pt_Ele500'].Fill(truth_pt)
-    
+
+        if truth_pt>500:
+            if e.pt>400: hh['ECal_xy_pass400'].Fill(ecalx, ecaly)
+            else: hh['ECal_xy_fail400'].Fill(ecalx, ecaly)
+ 
         # Neutron trigger
         if hcal_back_sum>100: hh['Truth_e_BackHcal100'].Fill(truth_e)
         if hcal_back_sum>1000: hh['Truth_e_BackHcal1000'].Fill(truth_e)
@@ -377,15 +406,19 @@ if False:
   
   ecal_layer_energies = [1000,1500,2000,2500,3000,3500,4000]
   for e in ecal_layer_energies:
-      h = hh['Ecal_minLayerSum']
       b = h.GetYaxis().FindBin(e)
+      h = hh['Ecal_minLayerSum']
       hh['Ecal_layerAbove{}MeV'.format(e)] = h.ProjectionX('Ecal_layerAbove{}MeV'.format(e),b,-1)
+      h = hh['Ecal_maxLayerSum']
+      hh['Ecal_layerBelow{}MeV'.format(e)] = h.ProjectionX('Ecal_layerBelow{}MeV'.format(e),0,b)
       
   hcal_layer_adcs = [5,10,20,50,100]
   for e in hcal_layer_adcs:
-      h = hh['Hcal_minBackLayerSum']
       b = h.GetYaxis().FindBin(e)
+      h = hh['Hcal_minBackLayerSum']
       hh['Hcal_backLayerAbove{}adc'.format(e)] = h.ProjectionX('Hcal_backLayerAbove{}adc'.format(e),b,-1)
+      h = hh['Hcal_maxBackLayerSum']
+      hh['Hcal_backLayerBelow{}adc'.format(e)] = h.ProjectionX('Hcal_backLayerBelow{}adc'.format(e),0,b)
     
 #f_output.Write()
 for h in hh:
