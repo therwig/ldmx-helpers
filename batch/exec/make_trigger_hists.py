@@ -85,6 +85,8 @@ bookTH2(hh,'Hcal_sideLayerSum',';layer number;total ACD [counts]', nHcalLayersSi
 bookTH2(hh,'Hcal_minSideLayerSum',';layer number;total ACD [counts]', nHcalLayersSide,-0.5,nHcalLayersSide-0.5, 200,0,10e3,)
 bookTH2(hh,'Hcal_maxSideLayerSum',';layer number;total ACD [counts]', nHcalLayersSide,-0.5,nHcalLayersSide-0.5, 200,0,10e3,)
 # enum HcalSection { BACK = 0, TOP = 1, BOTTOM = 2, LEFT = 4, RIGHT = 3 };
+## FYI
+# pe_per_adc_{1.2/5}
 
 bookTH1(hh,'Clus_e',';ECal cluster E [MeV]',200,0,8000)
 bookTH1(hh,'Clus_nTP',';ECal cluster TP multiplicity',100,-0.5,99.5)
@@ -157,17 +159,36 @@ bookTH1(hh,'Truth_pyAbs2',';Truth particle p_{T} [MeV]',40,0,1200)
 bookTH1(hh,'Truth_pt',';Truth particle p_{T} [MeV]',40,0,100)
 bookTH1(hh,'Truth_pt2',';Truth particle p_{T} [MeV]',40,0,1200)
 bookTH1(hh,'Truth_e',';Truth particle E [MeV]',40,0,4000)
+bookTH1(hh,'Truth_e2',';Truth particle E [MeV]',40,0,5000)
+bookTH1(hh,'Truth_e3',';Truth particle E [MeV]',40,0,500)
+bookTH1(hh,'Truth_ke',';Truth particle K.E. [MeV]',40,0,4000)
 bookTH2(hh,'Truth_pt_vs_e',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,1200,40,0,4e3)
 
 # Ele trigger
+bookTH1(hh,'Truth_e_Ele0',';Truth electron E [MeV]',40,0,4000)
+bookTH1(hh,'Truth_e2_Ele0',';Truth electron E [MeV]',40,0,500)
+bookTH1(hh,'Truth_pt_Ele0',';Truth electron p_{T} [MeV]',40,0,1200)
 bookTH1(hh,'Truth_pt_Ele400',';Truth electron p_{T} [MeV]',40,0,1200)
 bookTH1(hh,'Truth_pt_Ele500',';Truth electron p_{T} [MeV]',40,0,1200)
 bookTH2(hh,'ECal_xy_pass400',';x[mm];y[mm]', 200,-300,300,200,-300,300)
 bookTH2(hh,'ECal_xy_fail400',';x[mm];y[mm]', 200,-300,300,200,-300,300)
+bookTH2(hh,'Truth_pt_vs_e_pass400',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,1200,40,0,4e3)
+bookTH2(hh,'Truth_pt_vs_e_fail400',';Trigger electron p_{T} [MeV];energy [MeV]',40,0,1200,40,0,4e3)
 # HCal trigger
-bookTH1(hh,'Truth_e_BackHcal100',';Truth electron E [MeV]',40,0,4000)
-bookTH1(hh,'Truth_e_BackHcal1000',';Truth electron E [MeV]',40,0,4000)
-bookTH1(hh,'Truth_e_BackHcal10000',';Truth electron E [MeV]',40,0,4000)
+bookTH1(hh,'Truth_e_BackHcal50',';Truth E [MeV]',40,0,5000)
+bookTH1(hh,'Truth_e_BackHcal300',';Truth E [MeV]',40,0,5000)
+bookTH1(hh,'Truth_e_BackHcal1000',';Truth E [MeV]',40,0,5000)
+bookTH1(hh,'Truth_e_BackHcal2000',';Truth E [MeV]',40,0,5000)
+bookTH1(hh,'Truth_e_BackHcal4000',';Truth E [MeV]',40,0,5000)
+bookTH1(hh,'Truth_e_BackHcal8000',';Truth E [MeV]',40,0,5000)
+bookTH1(hh,'Truth_e_BackHcal12000',';Truth E [MeV]',40,0,5000)
+bookTH1(hh,'Truth_ke_BackHcal50',';Truth K.E. [MeV]',40,0,4000)
+bookTH1(hh,'Truth_ke_BackHcal300',';Truth K.E. [MeV]',40,0,4000)
+bookTH1(hh,'Truth_ke_BackHcal1000',';Truth E [MeV]',40,0,4000)
+bookTH1(hh,'Truth_ke_BackHcal2000',';Truth E [MeV]',40,0,4000)
+bookTH1(hh,'Truth_ke_BackHcal4000',';Truth E [MeV]',40,0,4000)
+bookTH1(hh,'Truth_ke_BackHcal8000',';Truth E [MeV]',40,0,4000)
+bookTH1(hh,'Truth_ke_BackHcal12000',';Truth K.E. [MeV]',40,0,4000)
 
 #
 # produce 'ingredient' histograms from tree
@@ -252,7 +273,7 @@ for tree in trees:
                 if z<240.4 or z>240.6: continue
                 if t.getEdep() > ecal.getEdep():
                     ecal = t
-                
+
         tsx, tsy = ts.getPosition()[0], ts.getPosition()[1]
         hh['TS_xy'].Fill(tsx, tsy)
         ecalx, ecaly = ecal.getPosition()[0], ecal.getPosition()[1]
@@ -335,6 +356,7 @@ for tree in trees:
         truth_px = truth_p[0]
         truth_py = truth_p[1]
         truth_pt = hypot(truth_p[0],truth_p[1])
+        truth_ke = sqrt(pow(truth_p[0],2)+pow(truth_p[1],2)+pow(truth_p[2],2))
         hh['Truth_pyAbs'].Fill(abs(truth_py))
         hh['Truth_py'].Fill(truth_py)
         hh['Truth_px'].Fill(truth_px)
@@ -344,20 +366,47 @@ for tree in trees:
         hh['Truth_px2'].Fill(truth_px)
         hh['Truth_pt2'].Fill(truth_pt)
         hh['Truth_e'].Fill(truth_e)
+        hh['Truth_e2'].Fill(truth_e)
+        hh['Truth_e3'].Fill(truth_e)
+        hh['Truth_ke'].Fill(truth_ke)
         hh['Truth_pt_vs_e'].Fill(truth_pt,truth_e)
 
         # Ele trigger
+        if e.e>0.1:
+            hh['Truth_e_Ele0'].Fill(truth_e)
+            hh['Truth_e2_Ele0'].Fill(truth_e)
+            hh['Truth_pt_Ele0'].Fill(truth_pt)
         if e.pt>400: hh['Truth_pt_Ele400'].Fill(truth_pt)
         if e.pt>500: hh['Truth_pt_Ele500'].Fill(truth_pt)
 
         if truth_pt>500:
             if e.pt>400: hh['ECal_xy_pass400'].Fill(ecalx, ecaly)
             else: hh['ECal_xy_fail400'].Fill(ecalx, ecaly)
+            if e.pt>400: hh['Truth_pt_vs_e_pass400'].Fill(truth_pt,truth_e)
+            else: hh['Truth_pt_vs_e_fail400'].Fill(truth_pt,truth_e)
  
         # Neutron trigger
-        if hcal_back_sum>100: hh['Truth_e_BackHcal100'].Fill(truth_e)
-        if hcal_back_sum>1000: hh['Truth_e_BackHcal1000'].Fill(truth_e)
-        if hcal_back_sum>10000: hh['Truth_e_BackHcal10000'].Fill(truth_e)
+        if hcal_back_sum>50:
+            hh['Truth_e_BackHcal50'].Fill(truth_e)
+            hh['Truth_ke_BackHcal50'].Fill(truth_ke)
+        if hcal_back_sum>300:
+            hh['Truth_e_BackHcal300'].Fill(truth_e)
+            hh['Truth_ke_BackHcal300'].Fill(truth_ke)
+        if hcal_back_sum>1000:
+            hh['Truth_e_BackHcal1000'].Fill(truth_e)
+            hh['Truth_ke_BackHcal1000'].Fill(truth_ke)
+        if hcal_back_sum>2000:
+            hh['Truth_e_BackHcal2000'].Fill(truth_e)
+            hh['Truth_ke_BackHcal2000'].Fill(truth_ke)
+        if hcal_back_sum>4000:
+            hh['Truth_e_BackHcal4000'].Fill(truth_e)
+            hh['Truth_ke_BackHcal4000'].Fill(truth_ke)
+        if hcal_back_sum>8000:
+            hh['Truth_e_BackHcal8000'].Fill(truth_e)
+            hh['Truth_ke_BackHcal8000'].Fill(truth_ke)
+        if hcal_back_sum>12000:
+            hh['Truth_e_BackHcal12000'].Fill(truth_e)
+            hh['Truth_ke_BackHcal12000'].Fill(truth_ke)
     
     
         # # can calculate the initial px (and py) from E, dx
@@ -382,43 +431,43 @@ for tree in trees:
 for h in hh:
     remove_overflow(hh[h])
 
-if False:
-  def MakeRateVsCut(h, reverse=False):
-      h2 = h.Clone("rate_"+h.GetName())
-      n = h2.GetNbinsX()
-      for i in range(1,n+1):
-          # h2.SetBinContent( h.Integral(i,n) )
-          # events from bin ib to max         
-          # e=ROOT.double(0)
-          e=ctypes.c_double(0)
-          if reverse:
-              val = h.IntegralAndError(0,i,e)
-          else:
-              val = h.IntegralAndError(i,n+1,e)
-          h2.SetBinContent(i,val)
-          h2.SetBinError(i,e.value)
+# if False:
+#   def MakeRateVsCut(h, reverse=False):
+#       h2 = h.Clone("rate_"+h.GetName())
+#       n = h2.GetNbinsX()
+#       for i in range(1,n+1):
+#           # h2.SetBinContent( h.Integral(i,n) )
+#           # events from bin ib to max         
+#           # e=ROOT.double(0)
+#           e=ctypes.c_double(0)
+#           if reverse:
+#               val = h.IntegralAndError(0,i,e)
+#           else:
+#               val = h.IntegralAndError(i,n+1,e)
+#           h2.SetBinContent(i,val)
+#           h2.SetBinError(i,e.value)
               
-      return h2
+#       return h2
   
-  hh['rate_Ecal_sumE'] = MakeRateVsCut(hh['Ecal_sumE'], reverse=True)
-  hh['rate_Ecal_sumE_outer'] = MakeRateVsCut(hh['Ecal_sumE_outer'])
-  hh['rate_Hcal_sumE'] = MakeRateVsCut(hh['Hcal_sumE'])
+#   hh['rate_Ecal_sumE'] = MakeRateVsCut(hh['Ecal_sumE'], reverse=True)
+#   hh['rate_Ecal_sumE_outer'] = MakeRateVsCut(hh['Ecal_sumE_outer'])
+#   hh['rate_Hcal_sumE'] = MakeRateVsCut(hh['Hcal_sumE'])
   
-  ecal_layer_energies = [1000,1500,2000,2500,3000,3500,4000]
-  for e in ecal_layer_energies:
-      b = h.GetYaxis().FindBin(e)
-      h = hh['Ecal_minLayerSum']
-      hh['Ecal_layerAbove{}MeV'.format(e)] = h.ProjectionX('Ecal_layerAbove{}MeV'.format(e),b,-1)
-      h = hh['Ecal_maxLayerSum']
-      hh['Ecal_layerBelow{}MeV'.format(e)] = h.ProjectionX('Ecal_layerBelow{}MeV'.format(e),0,b)
+#   ecal_layer_energies = [1000,1500,2000,2500,3000,3500,4000]
+#   for e in ecal_layer_energies:
+#       b = h.GetYaxis().FindBin(e)
+#       h = hh['Ecal_minLayerSum']
+#       hh['Ecal_layerAbove{}MeV'.format(e)] = h.ProjectionX('Ecal_layerAbove{}MeV'.format(e),b,-1)
+#       h = hh['Ecal_maxLayerSum']
+#       hh['Ecal_layerBelow{}MeV'.format(e)] = h.ProjectionX('Ecal_layerBelow{}MeV'.format(e),0,b)
       
-  hcal_layer_adcs = [5,10,20,50,100]
-  for e in hcal_layer_adcs:
-      b = h.GetYaxis().FindBin(e)
-      h = hh['Hcal_minBackLayerSum']
-      hh['Hcal_backLayerAbove{}adc'.format(e)] = h.ProjectionX('Hcal_backLayerAbove{}adc'.format(e),b,-1)
-      h = hh['Hcal_maxBackLayerSum']
-      hh['Hcal_backLayerBelow{}adc'.format(e)] = h.ProjectionX('Hcal_backLayerBelow{}adc'.format(e),0,b)
+#   hcal_layer_adcs = [5,10,20,50,100]
+#   for e in hcal_layer_adcs:
+#       b = h.GetYaxis().FindBin(e)
+#       h = hh['Hcal_minBackLayerSum']
+#       hh['Hcal_backLayerAbove{}adc'.format(e)] = h.ProjectionX('Hcal_backLayerAbove{}adc'.format(e),b,-1)
+#       h = hh['Hcal_maxBackLayerSum']
+#       hh['Hcal_backLayerBelow{}adc'.format(e)] = h.ProjectionX('Hcal_backLayerBelow{}adc'.format(e),0,b)
     
 #f_output.Write()
 for h in hh:
