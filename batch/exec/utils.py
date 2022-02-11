@@ -27,3 +27,91 @@ def remove_overflow_2d(h):
 def remove_overflow(h):
         if h.InheritsFrom("TH2"): remove_overflow_2d(h)
         else: remove_overflow_1d(h)
+
+
+def plot(n, hs_, pDir, hEvts=None, xtitle='',ytitle='',
+         xmin=None, xmax=None, ymin=None, ymax=None
+         ,legs=None, logy=False):
+    if type(hs_)!=list: hs_=[hs_]
+    legCoords=(.70,.62, 0.92,.92)
+    isGraph = hs_[0].InheritsFrom('TGraph')
+    if isGraph:
+        legCoords=(.12,.68, 0.34,.92)
+    else:
+        legCoords=(.70,.62, 0.92,.92)
+
+    c = ROOT.TCanvas('c','',400,400)
+    c.SetRightMargin(0.05)
+    c.SetTopMargin(0.05)
+    if hEvts:
+        c.SetLogy()
+        c.SetGrid()
+    if logy: c.SetLogy()
+    hs=[]
+    if legs:
+        leg = ROOT.TLegend(*(legCoords)) 
+        leg.SetTextFont(42);
+        #leg.SetHeader("");
+        leg.SetNColumns(1);
+    if isGraph:
+        mg=ROOT.TMultiGraph()
+        for i,h in enumerate(hs_):
+            g = h.Clone()
+            mg.Add(g)
+            if legs: leg.AddEntry(g,legs[i],'le')
+        # for h in hs_: mg.Add(h.Clone())
+        # if legs:
+        #     for i,h in enumerate(hs_): 
+        mg.Draw("ALP plc")
+        if xtitle: mg.GetHistogram().GetXaxis().SetTitle(xtitle)
+        if ytitle: mg.GetHistogram().GetYaxis().SetTitle(ytitle)
+        mg.GetHistogram().GetYaxis().SetRangeUser(0,1.05)
+    else:
+        for i,h_ in enumerate(hs_):
+            h = h_.Clone()
+            hs+=[h]
+            if hEvts:
+                h.Scale(40e6/hEvts.GetBinContent(1))
+            if i==0:
+                if hEvts:
+                    h.GetYaxis().SetTitle('Rate [hz]')
+                    h.SetMinimum(ymin if ymin else 1)
+                if xtitle: h.GetXaxis().SetTitle(xtitle)
+                if ytitle: h.GetYaxis().SetTitle(ytitle)
+                if xmax or xmin:
+                    if xmin==None: xmin=0
+                    if xmax==None: xmax=h.GetXaxis().GetXmax()
+                    h.GetXaxis().SetRangeUser(xmin,xmax)
+            if h.InheritsFrom('TH1'):
+                h.Draw('e1 plc pfc'+(' same' if (i>0) else ''))
+            else: # graph
+                h.Draw('ALP')
+            if legs: leg.AddEntry(h,legs[i],'le')
+            # h.Draw('same plc' if (i>0) else 'plc')
+            # h.Draw('same plc hist')
+    if legs:
+        leg.SetFillStyle(1001) #solid
+        leg.SetFillColor(0)
+        #leg.SetTextAlign(12) # left center
+        leg.SetBorderSize(0)
+        leg.Draw()
+        
+    c.SaveAs(pDir+'/'+n+'.pdf')
+    
+def make_eff(num, den, rebin=1, zeroBelow=None):
+    g = ROOT.TGraphAsymmErrors()
+    num = num.Clone()
+    den = den.Clone()
+    if zeroBelow: #truncate low bins
+        for i in range(num.FindBin(zeroBelow)+1):
+            num.SetBinContent(i,0)
+            num.SetBinError(i,0)
+            den.SetBinContent(i,0)
+            den.SetBinError(i,0)
+    if rebin>1:
+        num.Rebin(rebin)
+        den.Rebin(rebin)
+    g.Divide(num, den, "b(1,1) mode")
+    g.SetName(num.GetName()+'_OVER_'+den.GetName())
+    return g
+        
