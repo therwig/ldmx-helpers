@@ -3,16 +3,11 @@ import os
 import json
 
 from LDMX.Framework import ldmxcfg
-
 p=ldmxcfg.Process("v12")
-
-# import LDMX.Ecal.EcalGeometry
-# import LDMX.Ecal.ecal_hardcoded_conditions
 
 from LDMX.SimCore import simulator
 from LDMX.SimCore import generators
 p.libraries.append("libSimCore.so")
-
 
 ### Particle Gun
 myGun = generators.gun('myGun')
@@ -27,11 +22,6 @@ sim.runNumber = 0
 sim.description = "Single electron gun"
 sim.beamSpotSmear = [20., 80., 0.] #mm
 sim.generators.append(myGun)
-
-# from LDMX.Ecal import digi
-# from LDMX.Ecal import ecal_trig_digi
-# from LDMX.EventProc.simpleTrigger import simpleTrigger 
-# from LDMX.EventProc.trackerHitKiller import trackerHitKiller
 
 from LDMX.Ecal import EcalGeometry
 ecal_geom = EcalGeometry.EcalGeometryProvider.getInstance()
@@ -66,24 +56,8 @@ p.sequence=[sim,hcaldigi,
             TrigScintDigiProducer.tagger(),
             TrigScintDigiProducer.up(),
             TrigScintDigiProducer.down(),
-            #ecal_vetos.EcalVetoProcessor(),
-            # trigger adds
-            # trigger_energy_sums.TriggerEcalEnergySum(),
-            # trigger_energy_sums.TriggerHcalEnergySum(),
-            # trigger_energy_sums.TrigEcalClusterProducer(),
-            # dump_file_writer.DumpFileWriter(),
 ]
 p.sequence += trigger_seq
-# p.sequence=[ sim,
-#              digi.EcalDigiProducer(),
-#              ecal_trig_digi.EcalTrigPrimDigiProducer(),
-#              digi.EcalRecProducer(),
-#              trackerHitKiller,
-#              simpleTrigger,
-#              ldmxcfg.Producer('finableTrack','ldmx::FindableTrackProcessor','EventProc'),
-#              ldmxcfg.Producer('trackerVeto' ,'ldmx::TrackerVetoProcessor'  ,'EventProc')
-# ]
-
 
 ### Configurable parameters
 nEvents=100

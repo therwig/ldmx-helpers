@@ -1,4 +1,6 @@
-import sys, os, ROOT, ctypes
+import sys, os
+import ROOT
+import ctypes
 ROOT.gROOT.SetBatch(1)
 ROOT.gStyle.SetOptStat(0)
 ROOT.gStyle.SetPalette(ROOT.kCMYK)
@@ -7,7 +9,7 @@ from math import atan, hypot
 from collections import OrderedDict
 from utils import *
 
-infiles = 'hist.root'
+infile = 'hist.root'
 if len(sys.argv)>1: infile = sys.argv[1]
 outfile='plot_'+infile.split('/')[-1]
 
@@ -120,7 +122,22 @@ leg=['Sum(ADC)>{}'.format(e) for e in hcal_side_layer_adcs]
 plot('hcalSideLayers', hs, pDir, hEvts=hEvts, xtitle='Side HCal trigger layer',legs=leg)
 hs = [hh['Ecal_layerAbove{}MeV'.format(e)] for e in ecal_layer_energies]
 leg=['Sum(MeV)>{}'.format(e) for e in ecal_layer_energies]
+leg=['E_{{sum}} > {:.1f} GeV'.format(e/1e3) for e in ecal_layer_energies]
 plot('ecalLayers', hs, pDir, hEvts=hEvts, xtitle='ECal trigger layer',legs=leg)
+if True:
+    hnews=[] #h.Clone() for h in hs]
+    for h in hs:
+        xlo=240
+        xhi=690
+        xn = h.GetNbinsX()
+        hnew = ROOT.TH1F(h.GetName()+"_rescale",h.GetTitle(),xn,xlo,xhi)
+        for i in range(0,xn+2):
+            hnew.SetBinContent(i, h.GetBinContent(i))
+            hnew.SetBinError(i, h.GetBinError(i))
+        hnews.append(hnew)
+    hnews = [hnews[i] for i in [0,2,4,6]]
+    leg = [leg[i] for i in [0,2,4,6]]
+    plot('ecalLayersZ', hnews, pDir, hEvts=hEvts, xtitle='Distance from target [mm]',legs=leg, spam=True)
 
 hs = [hh['Hcal_backLayerBelow{}adc'.format(e)] for e in hcal_layer_adcs]
 leg=['Sum(ADC)<{}'.format(e) for e in hcal_layer_adcs]
@@ -156,11 +173,12 @@ plot('eleE_multi', [hh['rate_Ele{}_e'.format(i)] for i in range(2,5)], pDir, hEv
 # print([e1,e2])
 # plot('eff_Ele400', [e1,e2], pDir, xtitle='Truth electron p_{T} [MeV]',ytitle="efficiency",legs=['p_{T}>400 MeV','p_{T}>500 MeV'])
 zeroBelow=50 # MeV
-plot('eff_ele_e2_Ele0', make_eff(hh['Truth_e2_Ele0'],hh['Truth_e3'], rebin=2), pDir, xtitle='Truth electron E [MeV]',ytitle="efficiency")
-plot('eff_ele_e_Ele0', make_eff(hh['Truth_e_Ele0'],hh['Truth_e'], rebin=2), pDir, xtitle='Truth electron E [MeV]',ytitle="efficiency")
-plot('eff_ele_pt_Ele0', make_eff(hh['Truth_pt_Ele0'],hh['Truth_pt2'], rebin=2), pDir, xtitle='Truth electron p_{T} [MeV]',ytitle="efficiency")
-plot('eff_ele_pt_Ele400', make_eff(hh['Truth_pt_Ele400'],hh['Truth_pt2'], rebin=2, zeroBelow=zeroBelow), pDir, xtitle='Truth electron p_{T} [MeV]',ytitle="efficiency")
-plot('eff_ele_pt_Ele500', make_eff(hh['Truth_pt_Ele500'],hh['Truth_pt2'], rebin=2, zeroBelow=zeroBelow), pDir, xtitle='Truth electron p_{T} [MeV]',ytitle="efficiency")
+if hasattr(hh,'Truth_e2_Ele0'):
+  plot('eff_ele_e2_Ele0', make_eff(hh['Truth_e2_Ele0'],hh['Truth_e3'], rebin=2), pDir, xtitle='Truth electron E [MeV]',ytitle="efficiency")
+  plot('eff_ele_e_Ele0', make_eff(hh['Truth_e_Ele0'],hh['Truth_e'], rebin=2), pDir, xtitle='Truth electron E [MeV]',ytitle="efficiency")
+  plot('eff_ele_pt_Ele0', make_eff(hh['Truth_pt_Ele0'],hh['Truth_pt2'], rebin=2), pDir, xtitle='Truth electron p_{T} [MeV]',ytitle="efficiency")
+  plot('eff_ele_pt_Ele400', make_eff(hh['Truth_pt_Ele400'],hh['Truth_pt2'], rebin=2, zeroBelow=zeroBelow), pDir, xtitle='Truth electron p_{T} [MeV]',ytitle="efficiency")
+  plot('eff_ele_pt_Ele500', make_eff(hh['Truth_pt_Ele500'],hh['Truth_pt2'], rebin=2, zeroBelow=zeroBelow), pDir, xtitle='Truth electron p_{T} [MeV]',ytitle="efficiency")
 
 if 'Truth_e_BackHcal12000' in hh:
     zeroBelow=10 # MeV
