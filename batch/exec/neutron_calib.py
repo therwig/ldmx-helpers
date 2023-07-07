@@ -28,6 +28,7 @@ f_output = ROOT.TFile(outfile,'recreate')
 #HadHcalCalibFactor = 4e3/240 # standin for sampling faction correction (4GeV neutrons into hcal face)
 #EMHcalCalibFactor = 4e3/225 # standin for sampling faction correction (4GeV neutrons into hcal face)
 HCalCalibFactor = 4e3/238   # standin for sampling faction correction (4GeV neutrons into hcal face)
+ECalCalibFactor = 1.19 # obtained from 4 GeV neutrons into ECal + HCal, with hcal calib already applied
 
 hh=OrderedDict()
 def bookTH1(h, name, title, n, a, b):
@@ -157,7 +158,7 @@ for tree in trees:
 
         # ecal_calib = 1.49371e+03 + ecal * 1.13678e+00
         # hcal_calib = 2.17416e+01 + hcal * 3.63492e+00
-        ecal_calib = ecal
+        ecal_calib = ECalCalibFactor * ecal
         hcal_calib = HCalCalibFactor * hcal
         e_calib=ecal_calib+hcal_calib
         hh['Calib_ecal_e'].Fill(ecal_calib)

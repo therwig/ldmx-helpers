@@ -1,4 +1,5 @@
 from math import sqrt
+import ROOT
 
 def add_bin_1d(h, x1, x2):
     h.SetBinContent(x1, h.GetBinContent(x1) + h.GetBinContent(x2))
@@ -31,7 +32,7 @@ def remove_overflow(h):
 
 def plot(n, hs_, pDir, hEvts=None, xtitle='',ytitle='',
          xmin=None, xmax=None, ymin=None, ymax=None
-         ,legs=None, logy=False):
+         ,legs=None, logy=False, spam=False):
     if type(hs_)!=list: hs_=[hs_]
     legCoords=(.70,.62, 0.92,.92)
     isGraph = hs_[0].InheritsFrom('TGraph')
@@ -40,9 +41,13 @@ def plot(n, hs_, pDir, hEvts=None, xtitle='',ytitle='',
     else:
         legCoords=(.70,.62, 0.92,.92)
 
-    c = ROOT.TCanvas('c','',400,400)
-    c.SetRightMargin(0.05)
-    c.SetTopMargin(0.05)
+    # spam
+    legCoords=(.67,.52, 0.97,.92)
+    c = ROOT.TCanvas('c','',500,400)
+    c.SetRightMargin(0.02)
+    c.SetTopMargin(0.07)
+    c.SetLeftMargin(0.10)
+    c.SetBottomMargin(0.11)
     if hEvts:
         c.SetLogy()
         c.SetGrid()
@@ -70,11 +75,14 @@ def plot(n, hs_, pDir, hEvts=None, xtitle='',ytitle='',
         for i,h_ in enumerate(hs_):
             h = h_.Clone()
             hs+=[h]
+            #spam
+            h.SetLineWidth(2)
+            
             if hEvts:
                 h.Scale(40e6/hEvts.GetBinContent(1))
             if i==0:
                 if hEvts:
-                    h.GetYaxis().SetTitle('Rate [hz]')
+                    h.GetYaxis().SetTitle('Trigger rate [Hz]')
                     h.SetMinimum(ymin if ymin else 1)
                 if xtitle: h.GetXaxis().SetTitle(xtitle)
                 if ytitle: h.GetYaxis().SetTitle(ytitle)
@@ -82,6 +90,13 @@ def plot(n, hs_, pDir, hEvts=None, xtitle='',ytitle='',
                     if xmin==None: xmin=0
                     if xmax==None: xmax=h.GetXaxis().GetXmax()
                     h.GetXaxis().SetRangeUser(xmin,xmax)
+                #spam
+                h.GetXaxis().SetTitleSize(0.05)
+                h.GetXaxis().SetTitleOffset(1.0)
+                h.GetXaxis().SetLabelSize(0.05)
+                h.GetYaxis().SetTitleSize(0.05)
+                h.GetYaxis().SetTitleOffset(0.95)
+                h.GetYaxis().SetLabelSize(0.05)
             if h.InheritsFrom('TH1'):
                 h.Draw('e1 plc pfc'+(' same' if (i>0) else ''))
             else: # graph
@@ -90,11 +105,29 @@ def plot(n, hs_, pDir, hEvts=None, xtitle='',ytitle='',
             # h.Draw('same plc' if (i>0) else 'plc')
             # h.Draw('same plc hist')
     if legs:
+        #leg.SetTextAlign(12) # left center
         leg.SetFillStyle(1001) #solid
         leg.SetFillColor(0)
-        #leg.SetTextAlign(12) # left center
         leg.SetBorderSize(0)
         leg.Draw()
+        
+    if spam:
+        h.GetXaxis().SetTitleSize(0.065)
+        h.GetXaxis().SetTitleOffset(1.0)
+        h.GetXaxis().SetLabelSize(0.065)
+        h.GetYaxis().SetTitleSize(0.065)
+        h.GetYaxis().SetTitleOffset(0.95)
+        h.GetYaxis().SetLabelSize(0.065)
+        
+        l = ROOT.TLatex()
+        l.SetTextFont(72)
+        l.SetTextSize(0.05)
+        xtext=0.71
+        ytext=0.945
+        l.DrawLatexNDC(xtext,ytext,"LDMX")
+        l.SetTextFont(52)
+        # l.DrawLatexNDC(xtext+0.11,ytext,"Simulation Preliminary")
+        l.DrawLatexNDC(xtext+0.11,ytext,"Simulation")
         
     c.SaveAs(pDir+'/'+n+'.pdf')
     

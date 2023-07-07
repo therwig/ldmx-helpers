@@ -12,9 +12,12 @@ p.libraries.append("libSimCore.so")
 ### Particle Gun
 myGun = generators.gun('myGun')
 myGun.particle = 'e-' 
+myGun.particle = 'neutron' 
 myGun.position = [ 0., 0., -1.2 ]  # mm
+myGun.position = [ 0., 0., 240.4 ] # mm ecal face
+# myGun.position = [ 0., 0., 690.6 ] # mm back hcal face before ecal SP
 myGun.direction = [ 0., 0., 1] 
-myGun.energy = 4.0 # GeV
+myGun.energy = 1.5 # GeV
 
 ### GPS
 from gps_cmds import *
@@ -25,7 +28,7 @@ if nPart>1:
      gpsCmds += ["/gps/source/multiplevertex True"]    
 myGPS = generators.gps( 'myGPS' , gpsCmds )
 
-myGen = myGPS
+myGen = myGun
 
 sim = simulator.simulator("LDMX")
 sim.setDetector( 'ldmx-det-v12' , True )
@@ -71,7 +74,7 @@ p.sequence=[sim,hcaldigi,
 p.sequence += trigger_seq
 
 ### Configurable parameters
-nEvents=10000
+nEvents=1000
 seed=0
 outfile='out.root'
 env = os.environ
