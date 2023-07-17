@@ -120,6 +120,14 @@ if args.step == 'pf':
      trackPF = pfReco.pfTrackProducer()
      truthPF = pfReco.pfTruthProducer()
 
+     # configure clustering options
+     ecalPF.doSingleCluster = False #True
+     ecalPF.logEnergyWeight = True
+
+     hcalPF.doSingleCluster = False
+     hcalPF.clusterHitDist = 200. # mm
+     hcalPF.logEnergyWeight = True
+
      # hcalPF_v2 = pfReco.pfHcalClusterProducer()
      # hcalPF_v2.SetClusterParameters(minHits=5, eThresh=100)
      # hcalPF_v3 = pfReco.pfHcalClusterProducer()
