@@ -16,7 +16,7 @@ public:
   TP (int s, int l, float e) : strip(s), layer(l), pe(e) {}
 };
 int get_idx(int s, int l){
-  return s+100+l;
+  return s*100+l;
 }
 
 void runIt(TString fname="v3.3.6-1e_100PE_241008.root", TString procName="sim", TString oname="hist.root") {
