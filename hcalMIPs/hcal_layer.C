@@ -44,7 +44,6 @@ void runIt(TString fname="v3.3.6-1e_100PE_241008.root", TString procName="sim", 
 
     TFile* fo = new TFile(oname,"recreate");
     TH1F* deepestTP = new TH1F("deepestTP",";layer of the deepest Hcal tp",51,-0.5,50.5);
-    TH1F* deepestNonIsoTP = new TH1F("deepestNonIsoTP",";layer of the deepest non-isolated Hcal tp",51,-0.5,50.5);
     TH2F* deepestTP_vs_energy = new TH2F("deepestTP_vs_energy",";layer of the deepest Hcal tp;truth energy",51,-0.5,50.5,16,0,8e3);
     
     long iEvt=0;
@@ -68,25 +67,13 @@ void runIt(TString fname="v3.3.6-1e_100PE_241008.root", TString procName="sim", 
 	}
       }
       int lastLayer = 0;
-      int lastNonIsoLayer = 0;
+      std::vector<bool> layersHit(51,false);
       for(auto tp_pair : tp_list){
 	auto tp = tp_pair.second;
-	bool isIsolated = true;
-	//look for a nearby TP
-	for(int s=tp.strip-1; s<=tp.strip+1; s++){
-	  if (s<0 || s>4) continue;
-	  for(int l=tp.layer-1; l<=tp.layer+1; l++){
-	    if (l<0 || l>48) continue;
-	    if (tp_list.count(get_idx(s,l))) isIsolated = false;
-	    if (!isIsolated) break;
-	  }
-	  if (!isIsolated) break;
-	}
-	if (tp.layer > lastLayer) lastLayer = tp.layer;
-	if (!isIsolated && tp.layer > lastNonIsoLayer) lastNonIsoLayer = tp.layer;
+	layersHit[tp.layer] = 1;
+	if (tp.layer > lastLayer) lastLayer = tp.layer;	
       }
       deepestTP->Fill(lastLayer);
-      deepestNonIsoTP->Fill(lastNonIsoLayer);
       if (truth_e.GetSize()){
 	deepestTP_vs_energy->Fill(lastLayer, truth_e[0]);
       }
